@@ -118,13 +118,13 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
 
 
     config.input.on('pointerdown', function (pointer) {
-      if(this.input.pointer1.isDown){
+      if(this.input.pointer1.isDown && !this.input.pointer2.isDown){
         this.keys.TOUCH_START.x = this.input.pointer1.x;
         this.keys.TOUCH_START.y = this.input.pointer1.y;        
         this.keys.isTOUCH = true;
         this.keys.isRELEASE = false;
       }
-      if(this.input.pointer2.isDown){
+      if(this.input.pointer2.isDown){ 
         this.keys.TOUCH_START2.x = this.input.pointer2.x;
         this.keys.TOUCH_START2.y = this.input.pointer2.y;        
         this.keys.isTOUCH2 = true;
@@ -163,6 +163,9 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
       }
 
       if(this.input.pointer2.isDown){ 
+        this.keys.POINTER.x = this.input.pointer1.x;
+        this.keys.POINTER.y = this.input.pointer1.y;
+
         this.keys.POINTER2.x = this.input.pointer2.x;
         this.keys.POINTER2.y = this.input.pointer2.y;
       }
@@ -174,7 +177,7 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
 
         if(config.mode === "smooth"){
 
-          if(this.rangeRadius*this.rangeRadius <= this.keys.TOUCH_MOVE.x*this.keys.TOUCH_MOVE.x + this.keys.TOUCH_MOVE.y * this.keys.TOUCH_MOVE.y){
+          if(this.rangeRadius*this.rangeRadius <= (this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x)*(this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x) + (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y) * (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y)){
             this.keys.RADIAN = Math.atan2(this.keys.TOUCH_MOVE.x, this.keys.TOUCH_MOVE.y);
 
             this.keys.DIRECTION.x = this.rangeRadius * Math.sin(this.keys.RADIAN);
@@ -185,7 +188,7 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
             this.keys.POINTER.y = this.keys.TOUCH_START.y + this.rangeRadius * Math.cos(this.keys.RADIAN);
           }else{
 
-            if(this.rangeRadiusMin*this.rangeRadiusMin <= this.keys.TOUCH_MOVE.x*this.keys.TOUCH_MOVE.x + this.keys.TOUCH_MOVE.y * this.keys.TOUCH_MOVE.y){
+            if(this.rangeRadiusMin*this.rangeRadiusMin <= (this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x)*(this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x) + (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y) * (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y)){
 
               this.keys.DIRECTION.x = this.keys.TOUCH_MOVE.x;
               this.keys.DIRECTION.y = this.keys.TOUCH_MOVE.y;
@@ -297,33 +300,37 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
       if(this.input.pointer1.isDown){
         this.pointer.setVisible(true);
         this.pointer_center.setVisible(true);
+
+        this.pointer.x = this.keys.POINTER.x;
+        this.pointer.y = this.keys.POINTER.y;
+
+        this.pointer_center.x = this.keys.TOUCH_START.x;
+        this.pointer_center.y = this.keys.TOUCH_START.y;
+
       }
 
     }else{
       this.pointer.setVisible(false);
       this.pointer_center.setVisible(false);
     }
-    this.pointer.x = this.keys.POINTER.x;
-    this.pointer.y = this.keys.POINTER.y;
-
-    this.pointer_center.x = this.keys.TOUCH_START.x;
-    this.pointer_center.y = this.keys.TOUCH_START.y;
 
     if(this.keys.isTOUCH2 === true){
       if(this.input.pointer2.isDown){
         this.pointer2.setVisible(true);
         this.pointer_center2.setVisible(true);
+
+        this.pointer2.x = this.keys.POINTER2.x;
+        this.pointer2.y = this.keys.POINTER2.y;
+
+        this.pointer_center2.x = this.keys.TOUCH_START2.x;
+        this.pointer_center2.y = this.keys.TOUCH_START2.y;
+
       }
     }else{
       this.pointer2.setVisible(false);
       this.pointer_center2.setVisible(false);
     }
 
-    this.pointer2.x = this.keys.POINTER2.x;
-    this.pointer2.y = this.keys.POINTER2.y;
-
-    this.pointer_center2.x = this.keys.TOUCH_START2.x;
-    this.pointer_center2.y = this.keys.TOUCH_START2.y;
 
 
     // if(this.keyboards.up.isDown){
