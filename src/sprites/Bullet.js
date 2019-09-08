@@ -21,7 +21,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     }
 
     update(time, delta) {
-      if(this.y > 480 || this.y < 0 || this.x < 0 || this.x > 320){
+      if(this.y > 1000 || this.y < 0 || this.x < 0 || this.x > 1000){
         this.destroy();
       }
     }

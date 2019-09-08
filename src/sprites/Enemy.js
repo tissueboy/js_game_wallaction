@@ -61,8 +61,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
   update(keys, time, delta) {
     if (!this.active) {
-      this.stopChasing();
-      this.stopShooting();
       return;
     }
     this.handleChase();
@@ -169,10 +167,14 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     });
   }
   stopShooting() {
+    if (!this.active) {
+      return;
+    }
     if (this.active) {
       this.stopRunning();
     }
     this.shootingPlayerTimerEvent.destroy();
+    // this.shootingPlayerTimerEvent.remove(false);
     this.shootingPlayerTimerEvent = null;
     this.direction.x = 0;
     this.direction.y = 0;

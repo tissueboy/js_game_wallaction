@@ -32,6 +32,10 @@ export default class Hp {
   }
   calc(num,obj){
     this.hp = this.hp + num;
+
+    if(this.hp >= this.hpMax){
+      this.hp = this.hpMax;
+    }
     this.hp_bar.displayWidth = this.hp_bar.displayWidthMax * (this.hp / this.hpMax);
     if(this.hp <= 0){
       // obj.explode();

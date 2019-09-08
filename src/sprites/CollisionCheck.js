@@ -3,11 +3,12 @@ export default class CollisionCheck{
 
     var _this = config.scene;
     _this.physics.add.collider(_this.player,_this.groundLayer);
-    _this.physics.add.collider(_this.enemy,_this.groundLayer);
-    _this.physics.add.collider(_this.player,_this.enemy);
+    _this.physics.add.collider(_this.enemyGroup,_this.groundLayer);
+    _this.physics.add.collider(_this.player,_this.enemyGroup);
 
     _this.physics.add.overlap(_this.player,_this.bulletEnemyGroup,this.playerCollision);
-    _this.physics.add.overlap(_this.enemy,_this.bulletGroup,this.enemyCollision);
+    // _this.physics.add.overlap(_this.enemy,_this.bulletGroup,this.enemyCollision);
+    _this.physics.add.overlap(_this.enemyGroup,_this.bulletGroup,this.enemyCollision);
     _this.physics.add.overlap(_this.player,_this.itemGroup,this.itemCollision);
 
   }

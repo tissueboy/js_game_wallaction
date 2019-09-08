@@ -6,6 +6,7 @@ import Player from '../sprites/Player';
 import Enemy from '../sprites/Enemy';
 import Item from '../sprites/Item';
 import Heart from '../sprites/Heart';
+import Coin from '../sprites/Coin';
 
 class GameScene extends Phaser.Scene {
   constructor(test) {
@@ -21,7 +22,7 @@ class GameScene extends Phaser.Scene {
     this.map = this.make.tilemap({ key: 'map' });
     this.tileset = this.map.addTilesetImage('tileset', 'tiles');
     this.groundLayer = this.map.createDynamicLayer('ground', this.tileset, 0, 0);
-    this.groundLayer.setCollisionBetween(0, 1);
+    this.groundLayer.setCollisionBetween(0, 2);
     this.groundLayer.setCollisionByProperty({ collides: true });
     this.groundLayer.depth = 1;
 
@@ -39,13 +40,13 @@ class GameScene extends Phaser.Scene {
     });
     this.player.depth = 11;
 
-    this.enemy = new Enemy({
-      scene: this,
-      key: 'enemy',
-      x: 100,
-      y: 100
-    });
-    this.enemy.depth = 12;
+    // this.enemy = new Enemy({
+    //   scene: this,
+    //   key: 'enemy',
+    //   x: 100,
+    //   y: 100
+    // });
+    // this.enemy.depth = 12;
 
 
 
@@ -134,6 +135,9 @@ class GameScene extends Phaser.Scene {
     this.bulletEnemyGroup.depth = 14;
     // this.physics.add.overlap(this.player, this.enemyGroup, this.enemyCollision);
 
+    this.enemyGroup = this.add.group();
+    this.enemyGroup.depth = 10;
+
     this.itemGroup = this.add.group();
     this.itemGroup.depth = 5;
 
@@ -166,7 +170,12 @@ class GameScene extends Phaser.Scene {
       }
     ); 
 
-    this.enemy.update(this.keypad.keys, time, delta);
+    // this.enemy.update(this.keypad.keys, time, delta);
+    this.enemyGroup.children.entries.forEach(
+      (sprite) => {
+        sprite.update(time, delta);
+      }
+    );
 
     this.keypad.update(this.input);
 
@@ -174,6 +183,26 @@ class GameScene extends Phaser.Scene {
 
   }
   parseObjectLayers() {
+    this.map.getObjectLayer('enemies').objects.forEach(
+      (enemy) => {
+        let enemyObject;
+
+        switch (enemy.name) {
+          case 'enemy1':
+            enemyObject = new Enemy({
+              scene: this,
+              key: 'enemy',
+              x: enemy.x,
+              y: enemy.y
+            });
+            enemyObject.depth = 10;
+            this.enemyGroup.add(enemyObject);
+            break; 
+          default:
+            break;
+        }
+      }
+    );
     this.map.getObjectLayer('items').objects.forEach(
       (item) => {
         let itemObject;
@@ -188,7 +217,18 @@ class GameScene extends Phaser.Scene {
             });
             itemObject.depth = 10;
             this.itemGroup.add(itemObject);
-            break;                    
+            break;
+          case 'coin':
+            itemObject = new Coin({
+              scene: this,
+              key: 'coin',
+              x: item.x,
+              y: item.y
+            });
+            itemObject.depth = 10;
+            this.itemGroup.add(itemObject);
+            break;  
+
           default:
             // console.error('Unknown:', enemy.name); // eslint-disable-line no-console
             break;

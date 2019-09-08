@@ -5,7 +5,8 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
 
     this.range = 2;
     this.power = 2;
-    this.rangeRadius = 10;
+    this.rangeRadius = 16;
+    this.rangeRadiusMin =  6;
     this.input = config.input;
     this.input.addPointer(3);
     this.keys = {
@@ -184,10 +185,18 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
             this.keys.POINTER.y = this.keys.TOUCH_START.y + this.rangeRadius * Math.cos(this.keys.RADIAN);
           }else{
 
-            this.keys.DIRECTION.x = this.keys.TOUCH_MOVE.x;
-            this.keys.DIRECTION.y = this.keys.TOUCH_MOVE.y;
-            this.keys.VECTOR.x = this.keys.TOUCH_MOVE.x;
-            this.keys.VECTOR.y = this.keys.TOUCH_MOVE.y;
+            if(this.rangeRadiusMin*this.rangeRadiusMin <= this.keys.TOUCH_MOVE.x*this.keys.TOUCH_MOVE.x + this.keys.TOUCH_MOVE.y * this.keys.TOUCH_MOVE.y){
+
+              this.keys.DIRECTION.x = this.keys.TOUCH_MOVE.x;
+              this.keys.DIRECTION.y = this.keys.TOUCH_MOVE.y;
+              this.keys.VECTOR.x = this.keys.TOUCH_MOVE.x;
+              this.keys.VECTOR.y = this.keys.TOUCH_MOVE.y;
+            }else{
+              this.keys.DIRECTION.x = 0;
+              this.keys.DIRECTION.y = 0;
+              this.keys.VECTOR.x = 0;
+              this.keys.VECTOR.y = 0;              
+            }
 
           }
 
@@ -245,10 +254,20 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
 
           }else{
 
-            this.keys.DIRECTION2.x = this.keys.TOUCH_MOVE2.x;
-            this.keys.DIRECTION2.y = this.keys.TOUCH_MOVE2.y;
-            this.keys.VECTOR2.x = this.keys.TOUCH_MOVE2.x;
-            this.keys.VECTOR2.y = this.keys.TOUCH_MOVE2.y;
+            if(this.rangeRadiusMin*this.rangeRadiusMin <= this.keys.TOUCH_MOVE2.x*this.keys.TOUCH_MOVE2.x + this.keys.TOUCH_MOVE2.y * this.keys.TOUCH_MOVE2.y){
+
+              this.keys.DIRECTION2.x = this.keys.TOUCH_MOVE2.x;
+              this.keys.DIRECTION2.y = this.keys.TOUCH_MOVE2.y;
+              this.keys.VECTOR2.x = this.keys.TOUCH_MOVE2.x;
+              this.keys.VECTOR2.y = this.keys.TOUCH_MOVE2.y;
+
+            }else{
+              this.keys.DIRECTION2.x = 0;
+              this.keys.DIRECTION2.y = 0;
+              this.keys.VECTOR2.x = 0;
+              this.keys.VECTOR2.y = 0;           
+            }
+
 
           }
         }

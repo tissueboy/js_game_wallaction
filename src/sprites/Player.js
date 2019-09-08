@@ -28,7 +28,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     this.status = {
       hp: 10,
-      power: 11,
+      power: 4,
       defense: 1
     }
     this.damage_text = 0;
@@ -57,8 +57,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     /*==============================
     プレイヤーの移動
     ==============================*/
-    this.setVelocityX(keys.DIRECTION.x*10);
-    this.setVelocityY(keys.DIRECTION.y*10);
+    this.setVelocityX(keys.DIRECTION.x*6);
+    this.setVelocityY(keys.DIRECTION.y*6);
 
     this.arrow.x = keys.DIRECTION2.x + this.x;
     this.arrow.y = keys.DIRECTION2.y + this.y;
@@ -82,7 +82,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     発射の方向表示
     ==============================*/
     if(keys.isTOUCH2 === true){
-      this.arrow.setVisible(true);
+      if(keys.VECTOR2.x === 0 && keys.VECTOR2.y === 0){
+        this.arrow.setVisible(false);
+      }else{
+        this.arrow.setVisible(true);        
+      }
     }
 
     /*==============================
@@ -91,11 +95,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
-      if(this.active_time.lock === false){
-        this.bullet();
+      if(keys.VECTOR2.x === 0 && keys.VECTOR2.y === 0){
 
+      }else{
+        if(this.active_time.lock === false){
+          this.bullet();
+        }    
+        this.active_time.lock = true;      
       }
-      this.active_time.lock = true;  
+      
       this.arrow.setVisible(false);    
 
     }else{
