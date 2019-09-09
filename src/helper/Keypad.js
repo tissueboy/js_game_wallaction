@@ -6,7 +6,7 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
     this.range = 2;
     this.power = 2;
     this.rangeRadius = 16;
-    this.rangeRadiusMin =  6;
+    this.rangeRadiusMin =  4;
     this.input = config.input;
     this.input.addPointer(3);
     this.keys = {
@@ -120,13 +120,15 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
     config.input.on('pointerdown', function (pointer) {
       if(this.input.pointer1.isDown && !this.input.pointer2.isDown){
         this.keys.TOUCH_START.x = this.input.pointer1.x;
-        this.keys.TOUCH_START.y = this.input.pointer1.y;        
+        this.keys.TOUCH_START.y = this.input.pointer1.y;
+        this.keys.POINTER.x = this.input.pointer1.x;
+        this.keys.POINTER.y = this.input.pointer1.y;
         this.keys.isTOUCH = true;
         this.keys.isRELEASE = false;
       }
       if(this.input.pointer2.isDown){ 
         this.keys.TOUCH_START2.x = this.input.pointer2.x;
-        this.keys.TOUCH_START2.y = this.input.pointer2.y;        
+        this.keys.TOUCH_START2.y = this.input.pointer2.y;
         this.keys.isTOUCH2 = true;
         this.keys.isRELEASE2 = false;
       }
@@ -157,14 +159,12 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
 
     config.input.on('pointermove', function (pointer) {
 
-      if(this.input.pointer1.isDown){ 
+      if(this.input.pointer1.isDown && !this.input.pointer2.isDown){ 
         this.keys.POINTER.x = this.input.pointer1.x;
         this.keys.POINTER.y = this.input.pointer1.y;
       }
 
       if(this.input.pointer2.isDown){ 
-        this.keys.POINTER.x = this.input.pointer1.x;
-        this.keys.POINTER.y = this.input.pointer1.y;
 
         this.keys.POINTER2.x = this.input.pointer2.x;
         this.keys.POINTER2.y = this.input.pointer2.y;
@@ -175,104 +175,66 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
         this.keys.TOUCH_MOVE.x = this.input.pointer1.x - this.keys.TOUCH_START.x;
         this.keys.TOUCH_MOVE.y = this.input.pointer1.y - this.keys.TOUCH_START.y;
 
-        if(config.mode === "smooth"){
 
-          if(this.rangeRadius*this.rangeRadius <= (this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x)*(this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x) + (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y) * (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y)){
-            this.keys.RADIAN = Math.atan2(this.keys.TOUCH_MOVE.x, this.keys.TOUCH_MOVE.y);
+        if(this.rangeRadius*this.rangeRadius <= this.keys.TOUCH_MOVE.x * this.keys.TOUCH_MOVE.x + this.keys.TOUCH_MOVE.y * this.keys.TOUCH_MOVE.y){
+          this.keys.RADIAN = Math.atan2(this.keys.TOUCH_MOVE.x, this.keys.TOUCH_MOVE.y);
 
-            this.keys.DIRECTION.x = this.rangeRadius * Math.sin(this.keys.RADIAN);
-            this.keys.DIRECTION.y = this.rangeRadius * Math.cos(this.keys.RADIAN);
-            this.keys.VECTOR.x = this.rangeRadius * Math.sin(this.keys.RADIAN);
-            this.keys.VECTOR.y = this.rangeRadius * Math.cos(this.keys.RADIAN);
-            this.keys.POINTER.x = this.keys.TOUCH_START.x + this.rangeRadius * Math.sin(this.keys.RADIAN);
-            this.keys.POINTER.y = this.keys.TOUCH_START.y + this.rangeRadius * Math.cos(this.keys.RADIAN);
-          }else{
-
-            if(this.rangeRadiusMin*this.rangeRadiusMin <= (this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x)*(this.keys.TOUCH_START.x - this.keys.TOUCH_MOVE.x) + (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y) * (this.keys.TOUCH_START.y - this.keys.TOUCH_MOVE.y)){
-
-              this.keys.DIRECTION.x = this.keys.TOUCH_MOVE.x;
-              this.keys.DIRECTION.y = this.keys.TOUCH_MOVE.y;
-              this.keys.VECTOR.x = this.keys.TOUCH_MOVE.x;
-              this.keys.VECTOR.y = this.keys.TOUCH_MOVE.y;
-            }else{
-              this.keys.DIRECTION.x = 0;
-              this.keys.DIRECTION.y = 0;
-              this.keys.VECTOR.x = 0;
-              this.keys.VECTOR.y = 0;              
-            }
-
-          }
-
+          this.keys.DIRECTION.x = this.rangeRadius * Math.sin(this.keys.RADIAN);
+          this.keys.DIRECTION.y = this.rangeRadius * Math.cos(this.keys.RADIAN);
+          this.keys.VECTOR.x = this.rangeRadius * Math.sin(this.keys.RADIAN);
+          this.keys.VECTOR.y = this.rangeRadius * Math.cos(this.keys.RADIAN);
+          this.keys.POINTER.x = this.keys.TOUCH_START.x + this.rangeRadius * Math.sin(this.keys.RADIAN);
+          this.keys.POINTER.y = this.keys.TOUCH_START.y + this.rangeRadius * Math.cos(this.keys.RADIAN);
         }else{
 
-          //右
-          if(this.keys.TOUCH_MOVE.x > 20){
-            this.keys.DIRECTION.x = 1;
-            this.keys.DIRECTION_NAME = 'RIGHT';
-          }
-          //左
-          if(this.keys.TOUCH_MOVE.x < -20){
-            this.keys.DIRECTION.x = -1;
-            this.keys.DIRECTION_NAME = 'LEFT';
-          }
-          if(this.keys.TOUCH_MOVE.x <= 20 && this.keys.TOUCH_MOVE.x >= -20){
-            this.keys.DIRECTION.x = 0;
-          }
+          this.keys.DIRECTION.x = this.keys.TOUCH_MOVE.x;
+          this.keys.DIRECTION.y = this.keys.TOUCH_MOVE.y;
+          this.keys.VECTOR.x = this.keys.TOUCH_MOVE.x;
+          this.keys.VECTOR.y = this.keys.TOUCH_MOVE.y;
 
-          //下
-          if(this.keys.TOUCH_MOVE.y > 20){
-            this.keys.DIRECTION.y = 1;
-            this.keys.DIRECTION_NAME = 'BOTTOM';
-          }
-          //上
-          if(this.keys.TOUCH_MOVE.y < -20){
-            this.keys.DIRECTION.y = -1;
-            this.keys.DIRECTION_NAME = 'TOP';
-          }
-          if(this.keys.TOUCH_MOVE.y <= 20 && this.keys.TOUCH_MOVE.y >= -20){
-            this.keys.DIRECTION.y = 0;
-          }
         }
+
 
       }else{
         this.keys.DIRECTION.x = 0;
         this.keys.DIRECTION.y = 0;
       }
+
+
       if(this.keys.isTOUCH2 == true){
 
         this.keys.TOUCH_MOVE2.x = this.input.pointer2.x - this.keys.TOUCH_START2.x;
         this.keys.TOUCH_MOVE2.y = this.input.pointer2.y - this.keys.TOUCH_START2.y;
 
-        if(config.mode === "smooth"){
 
-          if(this.rangeRadius*this.rangeRadius <= this.keys.TOUCH_MOVE2.x*this.keys.TOUCH_MOVE2.x + this.keys.TOUCH_MOVE2.y * this.keys.TOUCH_MOVE2.y){
-            this.keys.RADIAN2 = Math.atan2(this.keys.TOUCH_MOVE2.x, this.keys.TOUCH_MOVE2.y);
 
-            this.keys.DIRECTION2.x = this.rangeRadius * Math.sin(this.keys.RADIAN2);
-            this.keys.DIRECTION2.y = this.rangeRadius * Math.cos(this.keys.RADIAN2);
-            this.keys.VECTOR2.x = this.rangeRadius * Math.sin(this.keys.RADIAN2);
-            this.keys.VECTOR2.y = this.rangeRadius * Math.cos(this.keys.RADIAN2);
-            this.keys.POINTER2.x = this.keys.TOUCH_START2.x + this.rangeRadius * Math.sin(this.keys.RADIAN2);
-            this.keys.POINTER2.y = this.keys.TOUCH_START2.y + this.rangeRadius * Math.cos(this.keys.RADIAN2);
+        if(this.rangeRadius*this.rangeRadius <= this.keys.TOUCH_MOVE2.x * this.keys.TOUCH_MOVE2.x + this.keys.TOUCH_MOVE2.y * this.keys.TOUCH_MOVE2.y){
+          this.keys.RADIAN2 = Math.atan2(this.keys.TOUCH_MOVE2.x, this.keys.TOUCH_MOVE2.y);
+
+          this.keys.DIRECTION2.x = this.rangeRadius * Math.sin(this.keys.RADIAN2);
+          this.keys.DIRECTION2.y = this.rangeRadius * Math.cos(this.keys.RADIAN2);
+          this.keys.VECTOR2.x = this.rangeRadius * Math.sin(this.keys.RADIAN2);
+          this.keys.VECTOR2.y = this.rangeRadius * Math.cos(this.keys.RADIAN2);
+          this.keys.POINTER2.x = this.keys.TOUCH_START2.x + this.rangeRadius * Math.sin(this.keys.RADIAN2);
+          this.keys.POINTER2.y = this.keys.TOUCH_START2.y + this.rangeRadius * Math.cos(this.keys.RADIAN2);
+
+        }else{
+
+          if(this.rangeRadiusMin*this.rangeRadiusMin <= this.keys.TOUCH_MOVE2.x * this.keys.TOUCH_MOVE2.x + this.keys.TOUCH_MOVE2.y * this.keys.TOUCH_MOVE2.y){
+
+            this.keys.DIRECTION2.x = 0;
+            this.keys.DIRECTION2.y = 0;
+            this.keys.VECTOR2.x = 0;
+            this.keys.VECTOR2.y = 0;
 
           }else{
-
-            if(this.rangeRadiusMin*this.rangeRadiusMin <= this.keys.TOUCH_MOVE2.x*this.keys.TOUCH_MOVE2.x + this.keys.TOUCH_MOVE2.y * this.keys.TOUCH_MOVE2.y){
-
-              this.keys.DIRECTION2.x = this.keys.TOUCH_MOVE2.x;
-              this.keys.DIRECTION2.y = this.keys.TOUCH_MOVE2.y;
-              this.keys.VECTOR2.x = this.keys.TOUCH_MOVE2.x;
-              this.keys.VECTOR2.y = this.keys.TOUCH_MOVE2.y;
-
-            }else{
-              this.keys.DIRECTION2.x = 0;
-              this.keys.DIRECTION2.y = 0;
-              this.keys.VECTOR2.x = 0;
-              this.keys.VECTOR2.y = 0;           
-            }
-
+            this.keys.DIRECTION2.x = this.keys.TOUCH_MOVE2.x;
+            this.keys.DIRECTION2.y = this.keys.TOUCH_MOVE2.y;
+            this.keys.VECTOR2.x = this.keys.TOUCH_MOVE2.x;
+            this.keys.VECTOR2.y = this.keys.TOUCH_MOVE2.y;
 
           }
+
         }
       }else{
         this.keys.DIRECTION2.x = 0;
@@ -284,18 +246,19 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
     /*==============================
     デバッグ
     ==============================*/
-    this.text = this.scene.add.text(10, 10, 'Use up to 4 fingers at once', { font: '8px Courier', fill: '#ff0000' });
-    this.text.depth = 100;
-    this.text.setScrollFactor(0,0);
+    // this.text = this.scene.add.text(10, 10, 'Use up to 4 fingers at once', { font: '8px Courier', fill: '#ff0000' });
+    // this.text.depth = 100;
+    // this.text.setScrollFactor(0,0);
 
   }
   update(){
 
-    this.text.setText([
-      'pointer1.isDown: ' + this.input.pointer1.isDown,
-      'pointer2.isDown: ' + this.input.pointer2.isDown,
-      'keys.RADIAN2: ' + this.keys.RADIAN2
-    ]);    
+    // this.text.setText([
+    //   'pointer1.isDown: ' + this.input.pointer1.isDown,
+    //   'pointer2.isDown: ' + this.input.pointer2.isDown,
+    //   'pointer1.x: ' + this.input.pointer1.x,
+    //   'pointer2.x: ' + this.input.pointer2.x,
+    // ]);    
     if(this.keys.isTOUCH === true){
       if(this.input.pointer1.isDown){
         this.pointer.setVisible(true);

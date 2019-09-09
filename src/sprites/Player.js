@@ -46,6 +46,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.damageText.setVisible(false);
 
     this.damageText.depth = 14;
+
+    /*==============================
+    デバッグ
+    ==============================*/
+    this.text = this.scene.add.text(10, 10, 'Use up to 4 fingers at once', { font: '8px Courier', fill: '#ff0000' });
+    this.text.depth = 100;
+    this.text.setScrollFactor(0,0);
   }
 
   create(){
@@ -53,6 +60,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(keys, time, delta) {
+    this.text.setText([
+      'keys.DIRECTION.x: ' + keys.DIRECTION.x,
+      'keys.DIRECTION.y: ' + keys.DIRECTION.y,
+    ]);   
 
     /*==============================
     プレイヤーの移動
