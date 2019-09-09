@@ -63,6 +63,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.text.setText([
       'keys.DIRECTION.x: ' + keys.DIRECTION.x,
       'keys.DIRECTION.y: ' + keys.DIRECTION.y,
+      'this.countTouch: ' + this.countTouch
     ]);   
 
     /*==============================
@@ -93,11 +94,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     発射の方向表示
     ==============================*/
     if(keys.isTOUCH2 === true){
-      if(keys.VECTOR2.x === 0 && keys.VECTOR2.y === 0){
-        this.arrow.setVisible(false);
+      if(keys.MotionRange2 == true){
+        this.arrow.setVisible(true);
       }else{
-        this.arrow.setVisible(true);        
+        this.arrow.setVisible(false);   
       }
+    }else{
+      this.arrow.setVisible(false);        
     }
 
     /*==============================
@@ -106,12 +109,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
-      if(keys.VECTOR2.x === 0 && keys.VECTOR2.y === 0){
-
-      }else{
-        if(this.active_time.lock === false){
-          this.bullet();
-        }    
+      if(keys.MotionRange2 == true && this.active_time.lock === false){
+        this.bullet();
         this.active_time.lock = true;      
       }
       
