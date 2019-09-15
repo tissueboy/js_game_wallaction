@@ -30,12 +30,15 @@ class BootScene extends Phaser.Scene {
     this.load.image('ui_coin_icon', 'assets/images/ui/coin.png');
     this.load.image('ui_level_icon', 'assets/images/ui/level.png');
 
+    this.load.image('sword', 'assets/images/sword.png');
+    this.load.spritesheet('sword_anime', 'assets/images/sword_anime.png', { frameWidth: 32, frameHeight: 32 });
     this.load.image('bullet', 'assets/images/bullet.png');
     this.load.image('arrow', 'assets/images/arrow.png');
 
     /*item*/
     this.load.image('heart', 'assets/images/items/heart.png');
     this.load.image('coin', 'assets/images/items/coin.png');
+
 
   }
 }

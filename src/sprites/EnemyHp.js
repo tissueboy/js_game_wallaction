@@ -37,6 +37,7 @@ export default class EnemyHp {
     this.hp_bar.displayWidth = this.hp_bar.displayWidthMax * (this.hp / this.hpMax);
     if(this.hp <= 0){
       obj.active = false;
+      obj.getExperience();
       obj.explode();
       this.explode();
     }

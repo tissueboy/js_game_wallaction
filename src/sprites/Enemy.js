@@ -8,10 +8,13 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     config.scene.add.existing(this);
     this.setImmovable(true);/*ぶつかっても影響を受けない*/
 
+    this.isDamege = false;
+
     this.status = {
       hp: 10,
       power: 5,
-      defense: 1
+      defense: 1,
+      experience: 10
     }
 
     this.hp = new EnemyHp({
@@ -57,6 +60,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   }
   create(){
+
+
 
   }
   update(keys, time, delta) {
@@ -195,7 +200,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       y: this.y,
       vx: direction_x,
       vy: direction_y,
-      target: this
+      target: this,
+      power: 0
     });
     this.scene.bulletEnemyGroup.add(bullet);   
     this.countTouch++; 
@@ -232,6 +238,26 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
           _damageText.setVisible(false);
         },
     });
+
+    this.isDamege = true;
+
+    var enemy = this;
+    var enemyDamageTween = this.scene.tweens.add({
+      targets: this,
+      alpha: 0.2,
+      duration: 200,
+      loop: 10,
+    });
+    var stop = function(){
+      enemyDamageTween.stop();
+      enemy.alpha = 1;
+      enemy.isDamege = false;
+    }
+    setTimeout(stop, 600);
+
+  }
+  getExperience(){
+    this.scene.experience = this.scene.experience + this.status.experience;
   }
   explode(){
     this.active = false;

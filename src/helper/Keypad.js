@@ -7,7 +7,7 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
     this.power = 2;
     this.rangeRadius = 16;
     this.rangeRadiusMin =  2;
-    this.rangeRadius2Min =  3;
+    this.rangeRadius2Min =  0;
     this.input = config.input;
     this.input.addPointer(3);
     this.keys = {

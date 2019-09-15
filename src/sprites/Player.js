@@ -1,4 +1,5 @@
 import Bullet from '../sprites/Bullet';
+import Sword from '../sprites/Sword';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
@@ -22,13 +23,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     config.scene.add.existing(this.arrow);
     this.arrow.setVisible(false);
 
+    this.setWeapon = "bullet";
+
+    this.isDamege = false;
+
     this.active_time = {
-      speed: 1,
-      lock: true
+      speed: 1
     }
     this.status = {
       hp: 10,
-      power: 4,
+      power: 2,
       defense: 1
     }
     this.damage_text = 0;
@@ -47,30 +51,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.damageText.depth = 14;
 
-    /*==============================
-    デバッグ
-    ==============================*/
-    this.text = this.scene.add.text(10, 10, 'Use up to 4 fingers at once', { font: '8px Courier', fill: '#ff0000' });
-    this.text.depth = 100;
-    this.text.setScrollFactor(0,0);
-  }
 
-  create(){
 
   }
 
   update(keys, time, delta) {
-    this.text.setText([
-      'keys.DIRECTION.x: ' + keys.DIRECTION.x,
-      'keys.DIRECTION.y: ' + keys.DIRECTION.y,
-      'this.countTouch: ' + this.countTouch
-    ]);   
+ 
 
     /*==============================
     プレイヤーの移動
     ==============================*/
-    this.setVelocityX(keys.DIRECTION.x*6);
-    this.setVelocityY(keys.DIRECTION.y*6);
+    this.setVelocityX(keys.DIRECTION.x*4);
+    this.setVelocityY(keys.DIRECTION.y*4);
 
     this.arrow.x = keys.DIRECTION2.x + this.x;
     this.arrow.y = keys.DIRECTION2.y + this.y;
@@ -81,24 +73,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     /*==============================
     発射の方向表示
     ==============================*/
-    if(keys.isTOUCH === true){
-      this.player_shot_line.clear();
-      this.player_shot_line.lineBetween(
-        this.x,
-        this.y,
-        this.x + keys.DIRECTION.x,
-        this.y + keys.DIRECTION.y
-      );
-    }
-    /*==============================
-    発射の方向表示
-    ==============================*/
     if(keys.isTOUCH2 === true){
-      if(keys.MotionRange2 == true){
+      // if(keys.MotionRange2 == true){
         this.arrow.setVisible(true);
-      }else{
-        this.arrow.setVisible(false);   
-      }
+      // }else{
+      //   this.arrow.setVisible(false);   
+      // }
     }else{
       this.arrow.setVisible(false);        
     }
@@ -109,10 +89,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
-      if(keys.MotionRange2 == true && this.active_time.lock === false){
-        this.bullet();
-        this.active_time.lock = true;      
-      }
+      // if(keys.MotionRange2 == true){
+        if(this.setWeapon === "bullet"){
+          this.bullet();
+        }
+        if(this.setWeapon === "sword"){
+          this.sword();
+        }     
+      // }
       
       this.arrow.setVisible(false);    
 
@@ -130,13 +114,34 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       y: this.y,
       vx: this.shotVelocity.x,
       vy: this.shotVelocity.y,
-      target: this
+      target: this,
+      power: this.scene.active_time.per
     });
     this.scene.bulletGroup.add(bullet);   
+    this.scene.active_time.bar = 0;
     this.countTouch++; 
   }
 
+  sword(){
+    var sword = new Sword({
+      scene: this.scene,
+      key: 'sword',
+      x: this.x,
+      y: this.y,
+      vx: this.shotVelocity.x,
+      vy: this.shotVelocity.y,
+      target: this
+    });
+    this.scene.swordGroup.add(sword);   
+    this.countTouch++; 
+  }
+  
   damage(num){
+    
+    if(this.isDamege === true){
+      return;
+    }
+
     let damage = num - this.status.defense;
     if(damage <= 0){
       damage = 1;
@@ -163,6 +168,23 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           _damageText.setVisible(false);
         },
     });
+
+    
+    this.isDamege = true;
+
+    var player = this;
+    var playerDamageTween = this.scene.tweens.add({
+      targets: this,
+      alpha: 0.2,
+      duration: 200,
+      loop: 5,
+    });
+    var stop = function(){
+      playerDamageTween.stop();
+      player.alpha = 1;
+      player.isDamege = false;
+    }
+    setTimeout(stop, 1000);
 
   }
 }

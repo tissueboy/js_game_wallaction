@@ -1,36 +1,90 @@
 export default class Bullet extends Phaser.GameObjects.Sprite {
-    constructor(config) {
+  constructor(config) {
 
-      super(config.scene,config.x,config.y,config.key,config.vx,config.vy,config.target);
-      
-      this.type = "bullet";
+    super(
+      config.scene,
+      config.x,config.y,
+      config.key,
+      config.vx,
+      config.vy,
+      config.target,
+      config.power
+    );
+    
+    this.type = "bullet";
 
-      config.scene.physics.world.enable(this);
-      config.scene.add.existing(this);
 
-      this.target = config.target;
-      
-      this.attackPoint = 1 * this.target.status.power;
+    config.scene.physics.world.enable(this);
+    config.scene.add.existing(this);
+    // this.body.collideWorldBounds = true;
+    // this.body.bounceX = 1;
+    // this.body.bounceY = 1;
+    // this.body.setCollideWorldBounds(true);
 
-      this.speed = 10;
-      this.depth = 10;
-      
-      this.body.setGravity(0,0);
-      this.body.setVelocity(config.vx*this.speed,config.vy*this.speed);   
+    this.target = config.target;
+    
+    this.attackPoint = Math.floor(1 * this.target.status.power + (this.target.status.power * config.power));
 
+    this.speed = 10;
+    this.depth = 10;
+
+    this.vx = config.vx;
+    this.vy = config.vy;
+    
+    this.body.setGravity(0,0);
+    this.body.setVelocity(this.vx*this.speed,this.vy*this.speed);   
+
+    this.breakTime = 1600;
+
+    this.breakTimerEvent;
+
+    // this.scaleX = 0.6;
+    // this.scaleY = 0.6;
+
+    this.scaleX += config.power;
+    this.scaleY += config.power;
+    
+
+
+    /*==============================
+    デバッグ
+    ==============================*/
+    this.text = this.scene.add.text(10, 10, 'Use up to 4 fingers at once', { font: '8px Courier', fill: '#ff0000' });
+    this.text.depth = 100;
+    this.text.setScrollFactor(0,0);
+
+  }
+
+  update(time, delta) {
+
+    this.breakTime -= delta;
+    if(this.breakTime < 0){
+      this.explode();
     }
 
-    update(time, delta) {
-      if(this.y > 1000 || this.y < 0 || this.x < 0 || this.x > 1000){
-        this.destroy();
-      }
-    }
-
-    collided() {
-
-    }
-
-    explode() {
+    if(this.y > 1000 || this.y < 0 || this.x < 0 || this.x > 1000){
       this.destroy();
     }
+  }
+
+  collided(bullet,layer) {
+
+  }
+
+  explode() {
+    this.scene.bulletGroup.remove(this);
+    this.scene.bulletEnemyGroup.remove(this);
+    this.destroy();
+  }
+  bounce(){
+
+    if(this.body.blocked.up || this.body.blocked.down){
+      this.vy = this.vy * -1;
+    }
+    if(this.body.blocked.left || this.body.blocked.right){
+      this.vx = this.vx * -1;
+    }
+
+    this.body.setVelocity(this.vx*this.speed,this.vy*this.speed);
+  }
 }

@@ -31,6 +31,7 @@ export default class Hp {
 
   }
   calc(num,obj){
+
     this.hp = this.hp + num;
 
     if(this.hp >= this.hpMax){

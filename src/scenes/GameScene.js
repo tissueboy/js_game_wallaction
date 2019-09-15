@@ -40,18 +40,6 @@ class GameScene extends Phaser.Scene {
     });
     this.player.depth = 11;
 
-    // this.enemy = new Enemy({
-    //   scene: this,
-    //   key: 'enemy',
-    //   x: 100,
-    //   y: 100
-    // });
-    // this.enemy.depth = 12;
-
-
-
-
-
     /*==============================
     キー入力
     ==============================*/
@@ -126,14 +114,19 @@ class GameScene extends Phaser.Scene {
     this.levelIcon.setScrollFactor(0,0);
     this.levelIcon.depth = 104;
 
+    /*==============================
+    UI | 経験値
+    ==============================*/
+    this.experience = 0;
 
 
+    this.swordGroup = this.add.group();
+    this.swordGroup.depth = 13;
 
     this.bulletGroup = this.add.group();
     this.bulletGroup.depth = 13;
     this.bulletEnemyGroup = this.add.group();
     this.bulletEnemyGroup.depth = 14;
-    // this.physics.add.overlap(this.player, this.enemyGroup, this.enemyCollision);
 
     this.enemyGroup = this.add.group();
     this.enemyGroup.depth = 10;
@@ -153,7 +146,9 @@ class GameScene extends Phaser.Scene {
     カメラ
     ==============================*/
     this.cameras.main.startFollow(this.player, true, 0.5, 0.5);
-    
+
+
+        
   }
   update(time, delta) {
 
@@ -176,7 +171,11 @@ class GameScene extends Phaser.Scene {
         sprite.update(time, delta);
       }
     );
-
+    this.swordGroup.children.entries.forEach(
+      (sprite) => {
+        sprite.update(time, delta);
+      }
+    );
     this.keypad.update(this.input);
 
     this.active_time.update(this.keypad.keys, time, delta);

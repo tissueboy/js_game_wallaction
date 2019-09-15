@@ -24,6 +24,7 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
     this.active_bar_base.depth = 104;
 
     this.speed = config.scene.player.active_time.speed * 0.1;
+    this.per = 0;
 
     // this.activeTimerEvent;
 
@@ -31,18 +32,13 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
 
   }
   update(keys, time, delta) {
-    if(this.scene.player.active_time.lock === true){
+    if(this.bar >= this.barMax){
+      this.bar = this.barMax;
+    }else{
       this.bar = this.bar + this.speed;
-      this.active_bar.displayWidth = this.active_bar.displayWidthMax * (this.bar / this.barMax);
-      if(this.bar >= this.barMax){
-        this.bar = this.barMax;
-        this.scene.player.active_time.lock = false;
-        // obj.explode();
-        // this.explode();
-      }
-      return;      
     }
-    this.bar = 0;
+    this.active_bar.displayWidth = this.active_bar.displayWidthMax * (this.bar / this.barMax);        
+    this.per = this.bar / this.barMax;
   }
 
 }
