@@ -234,7 +234,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         duration: 200,
         repeat: 0,
         onComplete: function () {
-          console.log('onComplete');
           _damageText.setVisible(false);
         },
     });

@@ -3,16 +3,29 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
 
     super(
       config.scene,
-      config.x,config.y,
+      config.x,
+      config.y,
       config.key,
+      config.frame,
       config.vx,
       config.vy,
       config.target,
       config.power
     );
-    
+
     this.type = "bullet";
 
+    // this.texture.
+    this.setTexture("bullet");
+
+    // this.scene.anims.create({
+    //   key: 'bulletAnime',
+    //   frames: this.scene.anims.generateFrameNumbers('bullet_anime', { start: 0, end: 0 }),
+    //   frameRate: 10,
+    //   repeat: -1
+    // });
+    // this.anims.play('bullet');
+    
 
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);

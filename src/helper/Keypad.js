@@ -69,9 +69,6 @@ export default class Keypad extends Phaser.Physics.Arcade.Sprite{
       MotionRange2: false
     };
     this.t = 0.0;
-    // if(config.input.pinter.pointer2.isDown){
-    //   console.log("config.input.pointer2.isDown")      
-    // }
 
     /*==============================
     コントローラー

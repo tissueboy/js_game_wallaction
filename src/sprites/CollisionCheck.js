@@ -19,12 +19,10 @@ export default class CollisionCheck{
     obj.explode();
   }
   enemyCollision(enemy,obj){
-    console.log("enemyCollision body2.key",obj.type);
     enemy.damage(obj.attackPoint);
     obj.explode();
   }
   itemCollision(player,obj){
-    console.log("itemCollision");
     obj.hit(player);
   }
   bulletBounceCollision(bullet,ground){

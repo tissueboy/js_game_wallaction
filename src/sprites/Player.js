@@ -74,11 +74,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     発射の方向表示
     ==============================*/
     if(keys.isTOUCH2 === true){
-      // if(keys.MotionRange2 == true){
-        this.arrow.setVisible(true);
-      // }else{
-      //   this.arrow.setVisible(false);   
-      // }
+      this.arrow.setVisible(true);
     }else{
       this.arrow.setVisible(false);        
     }
@@ -109,7 +105,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   bullet(){
     var bullet = new Bullet({
       scene: this.scene,
-      key: 'bullet',
       x: this.x,
       y: this.y,
       vx: this.shotVelocity.x,
@@ -117,6 +112,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       target: this,
       power: this.scene.active_time.per
     });
+    // bullet.loadTexture('bullet');
     this.scene.bulletGroup.add(bullet);   
     this.scene.active_time.bar = 0;
     this.countTouch++; 
@@ -164,7 +160,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         duration: 200,
         repeat: 0,
         onComplete: function () {
-          console.log('onComplete');
           _damageText.setVisible(false);
         },
     });

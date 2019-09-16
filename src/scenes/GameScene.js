@@ -1,4 +1,5 @@
 import Keypad from '../helper/Keypad';
+import Keypad_PC from '../helper/Keypad_PC';
 import Hp from '../helper/Hp';
 import ActiveTime from '../helper/ActiveTime';
 import CollisionCheck from '../sprites/CollisionCheck';
@@ -15,6 +16,8 @@ class GameScene extends Phaser.Scene {
     });
   }
   create(){
+
+    console.log("this",this.registry.list.MODE);
 
     /*==============================
     ステージの表示
@@ -43,13 +46,20 @@ class GameScene extends Phaser.Scene {
     /*==============================
     キー入力
     ==============================*/
-
-    this.keypad = new Keypad({
-      scene: this,
-      key: 'keypad',
-      input: this.input,
-      mode: "smooth"
-    });
+    this.keypad;
+    if(this.registry.list.MODE === "PC"){
+      this.keypad = new Keypad_PC({
+        scene: this,
+        key: 'keypad_pc',
+        input: this.input
+      });      
+    }else{
+      this.keypad = new Keypad({
+        scene: this,
+        key: 'keypad',
+        input: this.input
+      });            
+    }
     this.keypad.depth = 102;
 
     /*==============================
@@ -229,7 +239,6 @@ class GameScene extends Phaser.Scene {
             break;  
 
           default:
-            // console.error('Unknown:', enemy.name); // eslint-disable-line no-console
             break;
         }
       }

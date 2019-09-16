@@ -26,10 +26,6 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
     this.speed = config.scene.player.active_time.speed * 0.1;
     this.per = 0;
 
-    // this.activeTimerEvent;
-
-    console.log(config);
-
   }
   update(keys, time, delta) {
     if(this.bar >= this.barMax){

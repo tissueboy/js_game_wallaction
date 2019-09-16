@@ -1,17 +1,8 @@
 export default class Hp {
   constructor(config) {
 
-    // console.log("config",config);
-
-    // super(config.scene,config.x,config.y,config.key);
-    // config.scene.physics.world.enable(this);
-    // config.scene.add.existing(this);
-    
-    // // this.type = "hp";
     this.hp = 10;
     this.hpMax = 10;
-
-    // console.log("config.width",config.scene.game.config.width);
 
     this.hp_bar = config.scene.add.sprite(0, 0, 'hp_bar');
     this.hp_bar.setScrollFactor(0,0);

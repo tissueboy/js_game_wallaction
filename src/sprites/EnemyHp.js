@@ -32,7 +32,6 @@ export default class EnemyHp {
     this.hp_bar_bg.y = y - this.taget.body.halfHeight - this.hp_bar_bg.height * 1.5;
   }
   calc(num,obj){
-    console.log("calc num",num);
     this.hp = this.hp + num;
     this.hp_bar.displayWidth = this.hp_bar.displayWidthMax * (this.hp / this.hpMax);
     if(this.hp <= 0){

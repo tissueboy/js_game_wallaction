@@ -15,7 +15,7 @@ class BootScene extends Phaser.Scene {
 
     this.load.on('complete', () => {
       progress.destroy();
-      this.scene.start('GameScene');
+      this.scene.start('TitleScene');
     });
 
     this.load.image('tiles', 'assets/tilemaps/tile.png');
@@ -34,6 +34,8 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('sword_anime', 'assets/images/sword_anime.png', { frameWidth: 32, frameHeight: 32 });
     this.load.image('bullet', 'assets/images/bullet.png');
     this.load.image('arrow', 'assets/images/arrow.png');
+
+    this.load.image('title_start', 'assets/images/title_start.png');
 
     /*item*/
     this.load.image('heart', 'assets/images/items/heart.png');
