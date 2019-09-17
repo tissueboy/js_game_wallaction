@@ -8,6 +8,7 @@ import Enemy from '../sprites/Enemy';
 import Item from '../sprites/Item';
 import Heart from '../sprites/Heart';
 import Coin from '../sprites/Coin';
+import Fire from '../sprites/Fire';
 
 class GameScene extends Phaser.Scene {
   constructor(test) {
@@ -175,6 +176,7 @@ class GameScene extends Phaser.Scene {
       }
     ); 
 
+
     // this.enemy.update(this.keypad.keys, time, delta);
     this.enemyGroup.children.entries.forEach(
       (sprite) => {
@@ -186,6 +188,13 @@ class GameScene extends Phaser.Scene {
         sprite.update(time, delta);
       }
     );
+
+    this.itemGroup.children.entries.forEach(
+      (sprite) => {
+        sprite.update(time, delta);
+      }
+    );
+    
     this.keypad.update(this.input);
 
     this.active_time.update(this.keypad.keys, time, delta);
@@ -231,6 +240,17 @@ class GameScene extends Phaser.Scene {
             itemObject = new Coin({
               scene: this,
               key: 'coin',
+              x: item.x,
+              y: item.y
+            });
+            itemObject.depth = 10;
+            this.itemGroup.add(itemObject);
+            break;  
+
+          case 'fire':
+            itemObject = new Fire({
+              scene: this,
+              key: 'fire',
               x: item.x,
               y: item.y
             });

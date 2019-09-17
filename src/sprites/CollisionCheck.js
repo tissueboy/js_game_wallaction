@@ -13,6 +13,10 @@ export default class CollisionCheck{
 
     _this.physics.add.collider(_this.bulletGroup,_this.groundLayer,this.bulletBounceCollision);
 
+    _this.physics.add.collider(_this.itemGroup,_this.groundLayer,this.itemCheckCollision);
+    _this.physics.add.collider(_this.itemGroup,_this.enemyGroup,this.itemCheckCollision);
+
+
   }
   playerCollision(player,obj){
     player.damage(obj.attackPoint);
@@ -24,6 +28,9 @@ export default class CollisionCheck{
   }
   itemCollision(player,obj){
     obj.hit(player);
+  }
+  itemCheckCollision(item,obj){
+    item.checkCollision(obj);
   }
   bulletBounceCollision(bullet,ground){
     bullet.bounce(); 

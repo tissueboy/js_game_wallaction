@@ -40,6 +40,7 @@ class BootScene extends Phaser.Scene {
     /*item*/
     this.load.image('heart', 'assets/images/items/heart.png');
     this.load.image('coin', 'assets/images/items/coin.png');
+    this.load.image('fire', 'assets/images/items/fire.png');
 
 
   }

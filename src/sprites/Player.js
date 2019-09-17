@@ -51,6 +51,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.damageText.depth = 14;
 
+    this.attach;
+
 
 
   }
@@ -85,14 +87,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
-      // if(keys.MotionRange2 == true){
-        if(this.setWeapon === "bullet"){
-          this.bullet();
-        }
-        if(this.setWeapon === "sword"){
-          this.sword();
-        }     
-      // }
+      if(this.attach){
+        this.attach.throwItem({
+          x: this.x,
+          y: this.y,
+          vx: this.shotVelocity.x,
+          vy: this.shotVelocity.y,          
+        });
+      }
+      if(this.setWeapon === "bullet" && !this.attach){
+        this.bullet();
+      }
+
       
       this.arrow.setVisible(false);    
 
@@ -117,7 +123,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.active_time.bar = 0;
     this.countTouch++; 
   }
-
   sword(){
     var sword = new Sword({
       scene: this.scene,
