@@ -26,15 +26,44 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
     this.speed = config.scene.player.active_time.speed * 0.1;
     this.per = 0;
 
+    this.active = false;
+
+    this.store_power = 0;
+    this.store_power_max = 10;
+
+    // this.timedEventActive = this.scene.time.addEvent({
+    //   delay: 300,
+    //   callback: this.onEvent,
+    //   callbackScope: this,
+    //   repeat: -1
+    // });
   }
   update(keys, time, delta) {
-    if(this.bar >= this.barMax){
-      this.bar = this.barMax;
-    }else{
+
+    // console.log("this.timedEventActive",this.timedEventActive);
+    if(keys.isTOUCH2){
       this.bar = this.bar + this.speed;
+
+      if(this.bar >= this.barMax){
+        this.bar = this.barMax;
+        this.active = true;
+      }else{
+        this.active = false;
+      }
+    }
+    if(keys.isRELEASE2){
+      this.store_power = 0;
+      this.bar = 0;
     }
     this.active_bar.displayWidth = this.active_bar.displayWidthMax * (this.bar / this.barMax);        
     this.per = this.bar / this.barMax;
   }
+  // onEvent(){
+  //   console.log("this.store_power",this.store_power);
+  //   if(this.store_power >= this.store_power_max){
+  //     return;
+  //   }
+  //   this.store_power++;
+  // }
 
 }

@@ -95,7 +95,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           vy: this.shotVelocity.y,          
         });
       }
-      if(this.setWeapon === "bullet" && !this.attach){
+      if(this.setWeapon === "bullet" && !this.attach && this.scene.active_time.active){
         this.bullet();
       }
 
@@ -116,7 +116,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       vx: this.shotVelocity.x,
       vy: this.shotVelocity.y,
       target: this,
-      power: this.scene.active_time.per
+      power: this.scene.active_time.store_power*0.1
     });
     // bullet.loadTexture('bullet');
     this.scene.bulletGroup.add(bullet);   
