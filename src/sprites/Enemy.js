@@ -117,7 +117,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.active) {
       this.stopRunning();
     }
-    this.chasingPlayerTimerEvent.destroy();
+    // this.chasingPlayerTimerEvent.destroy();
     this.chasingPlayerTimerEvent = null;
   }
   moveTowardsPlayer() {
@@ -178,9 +178,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.active) {
       this.stopRunning();
     }
-    this.shootingPlayerTimerEvent.destroy();
+    // this.shootingPlayerTimerEvent.destroy();
     // this.shootingPlayerTimerEvent.remove(false);
-    this.shootingPlayerTimerEvent = null;
+    // this.shootingPlayerTimerEvent = null;
     this.direction.x = 0;
     this.direction.y = 0;
   }

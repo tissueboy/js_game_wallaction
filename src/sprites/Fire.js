@@ -40,7 +40,8 @@ export default class Fire extends Item {
     } 
     if(obj === this.scene.enemyGroup){
       console.log("checkCollision enemyGroup");
-    } 
+    }
+    this.scene.player.attach = null;
     this.destroy();
   }
 }
