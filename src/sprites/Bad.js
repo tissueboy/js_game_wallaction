@@ -1,6 +1,6 @@
 import EnemyHp from '../sprites/EnemyHp';
 import Bullet from '../sprites/Bullet';
-export default class Enemy extends Phaser.Physics.Arcade.Sprite {
+export default class Bad extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
 
     super(config.scene, config.x, config.y, config.key);
@@ -11,11 +11,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.isDamege = false;
 
     this.status = {
-      hp: 10,
+      hp: 2,
       power: 5,
-      defense: 1,
+      defense: 2,
       experience: 10,
-      attackPoint: 2
+      attackPoint: 1
     }
 
     this.hp = new EnemyHp({
@@ -207,7 +207,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       type: "enemy"
     });
     this.scene.bulletEnemyGroup.add(bullet);   
-    this.countTouch++; 
+    // this.countTouch++; 
   }
   damage(num){
 

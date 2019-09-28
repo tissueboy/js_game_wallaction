@@ -2,6 +2,7 @@ export default class EnemyHp {
   constructor(config) {
 
     this.taget = config.target;
+    this._scene = config.scene;
 
     this.hp = config.hp;
     this.hpMax = config.hp;
@@ -36,10 +37,17 @@ export default class EnemyHp {
     this.hp_bar.displayWidth = this.hp_bar.displayWidthMax * (this.hp / this.hpMax);
     if(this.hp <= 0){
       obj.active = false;
+      console.log("this",this._scene);
+      this._scene.combo_count++;
+      if(this._scene.combo_count >= 2){
+        this._scene.comboText.text = "x "+this._scene.combo_count;        
+      }
       obj.getExperience();
       obj.explode();
       this.explode();
     }
+    
+
   }
   explode(){
     this.hp_bar.destroy();

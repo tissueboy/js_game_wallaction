@@ -25,18 +25,15 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
 
     this.speed = config.scene.player.active_time.speed * 0.1;
     this.per = 0;
+    this.flg_per_max = false;
 
     this.active = false;
 
     this.store_power = 0;
     this.store_power_max = 10;
 
-    // this.timedEventActive = this.scene.time.addEvent({
-    //   delay: 300,
-    //   callback: this.onEvent,
-    //   callbackScope: this,
-    //   repeat: -1
-    // });
+    this.timedEventActive;
+
   }
   update(keys, time, delta) {
 
@@ -45,19 +42,46 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
 
     if(this.bar >= this.barMax){
       this.bar = this.barMax;
-      // this.active = true;
+      this.active = true;
     }else{
-      // this.active = false;
+      this.active = false;
     }
     this.active_bar.displayWidth = this.active_bar.displayWidthMax * (this.bar / this.barMax);        
-    this.per = this.bar / this.barMax;
+    // this.per = this.bar / this.barMax;
+
+    if(this.active == true){
+      this.per = this.store_power / this.store_power_max;
+
+      if(this.store_power >= this.store_power_max){
+        this.flg_per_max = true;
+      }
+      if(this.timedEventActive){
+        return;
+      }
+      this.timedEventActive = this.scene.time.addEvent({
+        delay: 300,
+        callback: this.onEvent,
+        callbackScope: this,
+        repeat: -1,
+        startAt: 1000
+      });
+
+    }else{
+      if(this.timedEventActive){
+        this.timedEventActive.remove(false);
+        this.timedEventActive = null;
+      }
+      // console.log("this.timedEventActive",this.timedEventActive);
+      this.per = 0;
+      this.store_power = 0;
+      this.flg_per_max = false;
+    }
   }
-  // onEvent(){
-  //   console.log("this.store_power",this.store_power);
-  //   if(this.store_power >= this.store_power_max){
-  //     return;
-  //   }
-  //   this.store_power++;
-  // }
+  onEvent(){
+    if(this.store_power >= this.store_power_max){
+      return;
+    }
+    this.store_power++;
+  }
 
 }

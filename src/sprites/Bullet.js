@@ -1,3 +1,4 @@
+
 export default class Bullet extends Phaser.GameObjects.Sprite {
   constructor(config) {
 
@@ -10,10 +11,13 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
       config.vx,
       config.vy,
       config.target,
-      config.power
+      config.power,
+      config.scale,
+      config.type
     );
 
-    this.type = "bullet";
+    this.type = config.type;
+    this._scene = config.scene;
 
     // this.texture.
     this.setTexture("bullet");
@@ -54,8 +58,8 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     // this.scaleX = 0.6;
     // this.scaleY = 0.6;
 
-    this.scaleX += config.power;
-    this.scaleY += config.power;
+    this.scaleX = this.scaleX * config.scale;
+    this.scaleY = this.scaleY * config.scale;
     
 
 
@@ -85,6 +89,11 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
   }
 
   explode() {
+    console.log("this.type exp",this.type);
+    if(this.type === "player"){
+      this._scene.combo_count = 0;
+      this._scene.comboText.text = "x "+this._scene.combo_count;
+    }
     this.scene.bulletGroup.remove(this);
     this.scene.bulletEnemyGroup.remove(this);
     this.destroy();

@@ -2,13 +2,15 @@ import Keypad from '../helper/Keypad';
 import Keypad_PC from '../helper/Keypad_PC';
 import Hp from '../helper/Hp';
 import ActiveTime from '../helper/ActiveTime';
+
 import CollisionCheck from '../sprites/CollisionCheck';
 import Player from '../sprites/Player';
-import Enemy from '../sprites/Enemy';
+
 import Item from '../sprites/Item';
 import Heart from '../sprites/Heart';
 import Coin from '../sprites/Coin';
 import Fire from '../sprites/Fire';
+import CreateEnemy from '../helper/CreateEnemy';
 
 class GameScene extends Phaser.Scene {
   constructor(test) {
@@ -23,7 +25,7 @@ class GameScene extends Phaser.Scene {
     /*==============================
     ステージの表示
     ==============================*/
-    this.map = this.make.tilemap({ key: 'map' });
+    this.map = this.make.tilemap({ key: 'map',tileWidth: 16, tileHeight: 16});
     this.tileset = this.map.addTilesetImage('tileset', 'tiles');
     this.groundLayer = this.map.createDynamicLayer('ground', this.tileset, 0, 0);
     this.groundLayer.setCollisionBetween(0, 2);
@@ -31,7 +33,7 @@ class GameScene extends Phaser.Scene {
     this.groundLayer.depth = 1;
 
     this.objectLayer = this.map.createDynamicLayer('object', this.tileset, 0, 0);
-    this.objectLayer.setCollisionBetween(2, 2);
+    // this.objectLayer.setCollisionBetween(2, 2);
     this.objectLayer.setCollisionByProperty({ collides: true });
     this.objectLayer.depth = 2;
 
@@ -43,6 +45,14 @@ class GameScene extends Phaser.Scene {
       hp: this.hp,
     });
     this.player.depth = 11;
+
+    /*==============================
+    モンスターの生成
+    ==============================*/
+
+    this.createEnemy = new CreateEnemy({
+      scene: this
+    });
 
     /*==============================
     キー入力
@@ -77,6 +87,25 @@ class GameScene extends Phaser.Scene {
       scene: this,
       key: 'active_time'
     });
+
+    /*==============================
+    UI | コンボカウンター
+    ==============================*/
+    this.combo_count = 0;
+
+    this.comboText = this.add.text(this.game.config.width/2+20,15, "x "+this.combo_count, {
+      fontFamily: 'monospace',
+      fontSize: 10,
+      fontStyle: 'bold',
+      color: '#FFFFFF',
+      align: 'center',
+      style:{
+      }
+    });
+
+    this.comboText.depth = 104;
+
+    this.comboText.setScrollFactor(0,0);
 
     /*==============================
     UI | コイン
@@ -130,7 +159,6 @@ class GameScene extends Phaser.Scene {
     ==============================*/
     this.experience = 0;
 
-
     this.swordGroup = this.add.group();
     this.swordGroup.depth = 13;
 
@@ -145,7 +173,7 @@ class GameScene extends Phaser.Scene {
     this.itemGroup = this.add.group();
     this.itemGroup.depth = 5;
 
-    this.parseObjectLayers();
+    // this.parseObjectLayers();
 
     /*==============================
     衝突判定
@@ -153,12 +181,8 @@ class GameScene extends Phaser.Scene {
     this.CollisionCheck = new CollisionCheck({
       scene: this
     });
-    /*==============================
-    カメラ
-    ==============================*/
-    this.cameras.main.startFollow(this.player, true, 0.5, 0.5);
 
-
+    // this.cameras.main.startFollow(this.player, true, 0.5, 0.5);
         
   }
   update(time, delta) {
@@ -198,71 +222,6 @@ class GameScene extends Phaser.Scene {
     this.keypad.update(this.input);
 
     this.active_time.update(this.keypad.keys, time, delta);
-
-  }
-  parseObjectLayers() {
-    this.map.getObjectLayer('enemies').objects.forEach(
-      (enemy) => {
-        let enemyObject;
-
-        switch (enemy.name) {
-          case 'enemy1':
-            enemyObject = new Enemy({
-              scene: this,
-              key: 'enemy',
-              x: enemy.x,
-              y: enemy.y
-            });
-            enemyObject.depth = 10;
-            this.enemyGroup.add(enemyObject);
-            break; 
-          default:
-            break;
-        }
-      }
-    );
-    this.map.getObjectLayer('items').objects.forEach(
-      (item) => {
-        let itemObject;
-
-        switch (item.name) {
-          case 'heart':
-            itemObject = new Heart({
-              scene: this,
-              key: 'heart',
-              x: item.x,
-              y: item.y
-            });
-            itemObject.depth = 10;
-            this.itemGroup.add(itemObject);
-            break;
-          case 'coin':
-            itemObject = new Coin({
-              scene: this,
-              key: 'coin',
-              x: item.x,
-              y: item.y
-            });
-            itemObject.depth = 10;
-            this.itemGroup.add(itemObject);
-            break;  
-
-          case 'fire':
-            itemObject = new Fire({
-              scene: this,
-              key: 'fire',
-              x: item.x,
-              y: item.y
-            });
-            itemObject.depth = 10;
-            this.itemGroup.add(itemObject);
-            break;  
-
-          default:
-            break;
-        }
-      }
-    );
 
   }
 }

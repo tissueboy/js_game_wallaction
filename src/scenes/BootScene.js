@@ -23,6 +23,8 @@ class BootScene extends Phaser.Scene {
     
     this.load.spritesheet('player', 'assets/images/player.png', { frameWidth: 16, frameHeight: 22 });    
     this.load.spritesheet('enemy', 'assets/images/enemy.png', { frameWidth: 16, frameHeight: 16 });    
+    this.load.spritesheet('bad', 'assets/images/bad.png', { frameWidth: 10, frameHeight: 10 });    
+    this.load.image('brain', 'assets/images/brain.png');
 
     /*UI*/
     this.load.image('hp_bar', 'assets/images/ui/hp_bar.png');
