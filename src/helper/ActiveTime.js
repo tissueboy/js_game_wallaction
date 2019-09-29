@@ -37,7 +37,6 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
   }
   update(keys, time, delta) {
 
-    // console.log("this.timedEventActive",this.timedEventActive);
     this.bar = this.bar + this.speed;
 
     if(this.bar >= this.barMax){

@@ -35,7 +35,7 @@ class BootScene extends Phaser.Scene {
     this.load.image('sword', 'assets/images/sword.png');
     this.load.spritesheet('sword_anime', 'assets/images/sword_anime.png', { frameWidth: 32, frameHeight: 32 });
     this.load.image('bullet', 'assets/images/bullet.png');
-    this.load.image('arrow', 'assets/images/arrow.png');
+    this.load.image('scope', 'assets/images/scope.png');
 
     this.load.image('title_start', 'assets/images/title_start.png');
 

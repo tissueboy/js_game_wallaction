@@ -1,3 +1,4 @@
+import Calcs from '../helper/Calcs';
 
 export default class Bullet extends Phaser.GameObjects.Sprite {
   constructor(config) {
@@ -42,14 +43,24 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     
     this.attackPoint = Math.floor(1 * this.target.status.power + (this.target.status.power * config.power));
 
-    this.speed = 10;
+    this.speed = 100;
     this.depth = 10;
 
     this.vx = config.vx;
     this.vy = config.vy;
+
+    /*==============================
+    受け取ったベクトルをMAXを1にしてvx*speedを均等にする。
+    ==============================*/
+    this.calcs = new Calcs();
+
+    this.vector_max_1 = this.calcs.returnMax1(this.vx,this.vy);
     
     this.body.setGravity(0,0);
-    this.body.setVelocity(this.vx*this.speed,this.vy*this.speed);   
+    this.body.setVelocity(
+      this.vector_max_1.x*this.speed,
+      this.vector_max_1.y*this.speed
+    );   
 
     this.breakTime = 1600;
 
@@ -79,9 +90,9 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
       this.explode();
     }
 
-    if(this.y > 1000 || this.y < 0 || this.x < 0 || this.x > 1000){
-      this.destroy();
-    }
+    // if(this.y > 1000 || this.y < 0 || this.x < 0 || this.x > 1000){
+    //   this.destroy();
+    // }
   }
 
   collided(bullet,layer) {
@@ -89,7 +100,6 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
   }
 
   explode() {
-    console.log("this.type exp",this.type);
     if(this.type === "player"){
       this._scene.combo_count = 0;
       this._scene.comboText.text = "x "+this._scene.combo_count;
@@ -101,12 +111,12 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
   bounce(){
 
     if(this.body.blocked.up || this.body.blocked.down){
-      this.vy = this.vy * -1;
+      this.vector_max_1.y = this.vector_max_1.y * -1;
     }
     if(this.body.blocked.left || this.body.blocked.right){
-      this.vx = this.vx * -1;
+      this.vector_max_1.x = this.vector_max_1.x * -1;
     }
 
-    this.body.setVelocity(this.vx*this.speed,this.vy*this.speed);
+    this.body.setVelocity(this.vector_max_1.x*this.speed,this.vector_max_1.y*this.speed);
   }
 }

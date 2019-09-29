@@ -37,7 +37,6 @@ export default class EnemyHp {
     this.hp_bar.displayWidth = this.hp_bar.displayWidthMax * (this.hp / this.hpMax);
     if(this.hp <= 0){
       obj.active = false;
-      console.log("this",this._scene);
       this._scene.combo_count++;
       if(this._scene.combo_count >= 2){
         this._scene.comboText.text = "x "+this._scene.combo_count;        

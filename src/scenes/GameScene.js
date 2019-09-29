@@ -6,10 +6,7 @@ import ActiveTime from '../helper/ActiveTime';
 import CollisionCheck from '../sprites/CollisionCheck';
 import Player from '../sprites/Player';
 
-import Item from '../sprites/Item';
-import Heart from '../sprites/Heart';
-import Coin from '../sprites/Coin';
-import Fire from '../sprites/Fire';
+
 import CreateEnemy from '../helper/CreateEnemy';
 
 class GameScene extends Phaser.Scene {
@@ -20,7 +17,7 @@ class GameScene extends Phaser.Scene {
   }
   create(){
 
-    console.log("this",this.registry.list.MODE);
+    console.log("this",this);
 
     /*==============================
     ステージの表示

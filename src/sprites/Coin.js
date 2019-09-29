@@ -5,8 +5,6 @@ export default class Coin extends Item {
     super(config);
     this.coinPoint = 1;
 
-    // console.log("key",config.key);
-
   }
   // hasEffect(player,item){
   //   player.hp = player.hp + item.recoveryPoint;

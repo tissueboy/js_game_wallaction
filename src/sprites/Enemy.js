@@ -1,6 +1,9 @@
 import EnemyHp from '../sprites/EnemyHp';
 import Bullet from '../sprites/Bullet';
+
+
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
+
   constructor(config) {
 
     super(config.scene, config.x, config.y, config.key);
@@ -10,6 +13,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.isDamege = false;
 
+    this._scene = config.scene;
+
     this.status = {
       hp: 10,
       power: 5,
@@ -17,13 +22,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       experience: 10,
       attackPoint: 2
     }
-
-    this.hp = new EnemyHp({
-      scene: config.scene,
-      key: 'hp',
-      target: this,
-      hp: this.status.hp
-    });
+    this.hp;
 
     this.damage_text = 0;
 
@@ -38,11 +37,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     });
 
     this.damageText.setVisible(false);
-
     this.damageText.depth = 14;
-
-
-    this.active = true;
 
     this.direction = {
       x: 0,
@@ -52,26 +47,39 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.chasingPlayerTimerEvent;
     this.shootingPlayerTimerEvent;
 
-
     this.MONSTER_SPEED = 1;
     this.MONSTER_HIT_DELAY = 100;
     this.CHASING_DISTANCE = 60;
     this.isStartled = false;
 
+    /*==============================
+    表示までOFF
+    ==============================*/
+    this.active = false;
+    this.damageText.visible = false;
+    this.visible = false;
+    this.delayActiveTimerEvent;
 
+    /*==============================
+    表示までのアニメーション
+    ==============================*/
+    this.circle = new Phaser.Geom.Circle(this.x, this.y, 10);//x,y.size
+    this.appearCircle = this.scene.add.graphics({ fillStyle: { color: 0xFF0000 } });
+    this.appearCircle.fillCircleShape(this.circle);
+    this.appearCircle.depth = 1;
+    this.delayActiveTimerEvent = this.scene.time.addEvent({
+      delay: 2000,
+      callback: this.appearEnemy,
+      callbackScope: this
+    });
   }
-  create(){
 
-
-
-  }
   update(keys, time, delta) {
     if (!this.active) {
       return;
     }
     this.handleChase();
     this.hp.move(this.x,this.y);
-
 
   }
   handleChase() {
@@ -264,6 +272,19 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   explode(){
     this.active = false;
     this.destroy();
+  }
+  appearEnemy(){
+    this.active = true;
+    this.visible = true; 
+    this.delayActiveTimerEvent.remove(false);
+    this.delayActiveTimerEvent = null;
+    this.hp = new EnemyHp({
+      scene: this._scene,
+      key: 'hp',
+      target: this,
+      hp: this.status.hp
+    });
+    this.appearCircle.destroy();
   }
 
 }
