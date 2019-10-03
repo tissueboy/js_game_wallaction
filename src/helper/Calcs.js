@@ -6,8 +6,6 @@ export default class Calcs {
 
     _max = _max ? _max : 1;//初期値の設定
 
-    console.log("returnMax1");
-
     let arr = {
       x: _x,
       y: _y

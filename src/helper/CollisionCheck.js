@@ -8,14 +8,14 @@ export default class CollisionCheck{
 
     _this.physics.add.overlap(_this.player,_this.enemyGroup,this.player_x_Enemy_Collision);
     _this.physics.add.overlap(_this.player,_this.bulletEnemyGroup,this.player_x_EnemyBullet_Collision);
-    // _this.physics.add.overlap(_this.enemy,_this.bulletGroup,this.enemyCollision);
+
     _this.physics.add.overlap(_this.enemyGroup,_this.bulletGroup,this.enemy_x_playerBullet_Collision);
-    _this.physics.add.overlap(_this.player,_this.itemGroup,this.itemCollision);
+    _this.physics.add.overlap(_this.player,_this.itemGroup,this.player_x_item_Collision);
 
     _this.physics.add.collider(_this.bulletGroup,_this.groundLayer,this.bulletBounceCollision);
 
     _this.physics.add.overlap(_this.itemGroup,_this.groundLayer,this.item_x_ground_Collision);
-    _this.physics.add.overlap(_this.itemGroup,_this.enemyGroup,this.itemCheckCollision);
+    _this.physics.add.overlap(_this.itemGroup,_this.enemyGroup,this.item_x_enemy_Collision);
 
 
   }
@@ -37,14 +37,20 @@ export default class CollisionCheck{
     enemy.damage(obj.attackPoint);    
     obj.explode();
   }
-  itemCollision(player,obj){
+  player_x_item_Collision(player,obj){
+    if(!obj.active){
+      return;
+    }
     obj.hit(player);
   }
   item_x_ground_Collision(item,obj){
-    // item.checkCollision(obj);
+    // item.checkCollision(item,obj);
   }
-  itemCheckCollision(item,obj){
-    item.checkCollision(obj);
+  item_x_enemy_Collision(item,enemy){
+    if(!enemy.active){
+      return;
+    }
+    item.checkCollision(item,enemy);
   }
   bulletBounceCollision(bullet,ground){
     bullet.bounce(); 

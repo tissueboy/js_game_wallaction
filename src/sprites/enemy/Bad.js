@@ -1,4 +1,4 @@
-import Enemy from '../sprites/Enemy';
+import Enemy from './Enemy';
 
 export default class Bad extends Enemy {
 

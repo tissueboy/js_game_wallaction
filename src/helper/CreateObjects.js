@@ -1,12 +1,13 @@
-import Enemy from '../sprites/Enemy';
-import Bad from '../sprites/Bad';
+import Enemy from '../sprites/enemy/Enemy';
+import Bad from '../sprites/enemy/Bad';
+import Brain from '../sprites/enemy/Brain';
 
-import Item from '../sprites/Item';
-import Heart from '../sprites/Heart';
-import Coin from '../sprites/Coin';
-import Fire from '../sprites/Fire';
+import Item from '../sprites/item/Item';
+import Heart from '../sprites/item/Heart';
+import Coin from '../sprites/item/Coin';
+import Fire from '../sprites/item/Fire';
 
-export default class CreateEnemy  extends Phaser.Time.TimerEvent{
+export default class CreateObjects  extends Phaser.Time.TimerEvent{
   constructor(config) {
 
     super(
@@ -34,7 +35,7 @@ export default class CreateEnemy  extends Phaser.Time.TimerEvent{
     this.appear_max_length = 3;
 
     this.objListEnemy = [
-      [Enemy,"enemy"],
+      [Brain,"brain"],
       [Bad,"bad"]
     ];
     this.objListItem = [
@@ -99,4 +100,5 @@ export default class CreateEnemy  extends Phaser.Time.TimerEvent{
 
     }
   }
+
 }

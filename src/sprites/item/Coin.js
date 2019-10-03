@@ -1,4 +1,4 @@
-import Item from '../sprites/Item';
+import Item from './Item';
 
 export default class Coin extends Item {
   constructor(config) {

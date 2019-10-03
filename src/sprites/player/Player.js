@@ -1,6 +1,6 @@
-import Bullet from '../sprites/Bullet';
-import Sword from '../sprites/Sword';
-import Calcs from '../helper/Calcs';
+import Bullet from '../weapon/Bullet';
+import Sword from '../weapon/Sword';
+import Calcs from '../../helper/Calcs';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
@@ -123,17 +123,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
+      console.log("this.attach",this.attach);
+      if(this.setWeapon === "bullet" && !this.attach && this.scene.active_time.active){
+        this.bullet();
+      }
+      
       if(this.attach){
+        this.attach.attached = false;
         this.attach.throwItem({
           x: this.x,
           y: this.y,
           vx: this.shotVelocity.x,
           vy: this.shotVelocity.y,          
         });
+        this.attach = null;
       }
-      if(this.setWeapon === "bullet" && !this.attach && this.scene.active_time.active){
-        this.bullet();
-      }
+
 
       
       // this.scope.setVisible(false);    

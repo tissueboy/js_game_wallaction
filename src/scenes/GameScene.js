@@ -2,12 +2,15 @@ import Keypad from '../helper/Keypad';
 import Keypad_PC from '../helper/Keypad_PC';
 import Hp from '../helper/Hp';
 import ActiveTime from '../helper/ActiveTime';
+import CollisionCheck from '../helper/CollisionCheck';
+import CreateObjects from '../helper/CreateObjects';
 
-import CollisionCheck from '../sprites/CollisionCheck';
-import Player from '../sprites/Player';
+
+import Player from '../sprites/player/Player';
+import Boss from '../sprites/boss/Boss';
+import Boss1 from '../sprites/boss/Boss1';
 
 
-import CreateEnemy from '../helper/CreateEnemy';
 
 class GameScene extends Phaser.Scene {
   constructor(test) {
@@ -47,9 +50,21 @@ class GameScene extends Phaser.Scene {
     モンスターの生成
     ==============================*/
 
-    this.createEnemy = new CreateEnemy({
+    this.createObjects = new CreateObjects({
       scene: this
     });
+
+    /*==============================
+    ボスの生成
+    ==============================*/
+
+    this.createBossTimerEvent = this.time.addEvent({
+      delay: 10000,
+      callback: this.createBoss,
+      callbackScope: this,
+      startAt: 0,
+    });
+
 
     /*==============================
     キー入力
@@ -170,6 +185,9 @@ class GameScene extends Phaser.Scene {
     this.itemGroup = this.add.group();
     this.itemGroup.depth = 5;
 
+    this.spellGroup = this.add.group();
+    this.spellGroup.depth = 5;
+
     // this.parseObjectLayers();
 
     /*==============================
@@ -220,6 +238,20 @@ class GameScene extends Phaser.Scene {
 
     this.active_time.update(this.keypad.keys, time, delta);
 
+  }
+  createBoss(){
+    this.boss1 = new Boss1({
+      scene: this,
+      key: 'boss1',
+      x: 40,
+      y: 100
+    });
+    this.createObjects.createObjTimerEvent.remove(false);
+    this.createObjects.createObjTimerEvent = false;
+
+    this.boss1.depth = 11;
+    this.createBossTimerEvent.remove(false);
+    this.createBossTimerEvent = null;
   }
 }
 

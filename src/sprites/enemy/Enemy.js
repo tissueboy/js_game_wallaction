@@ -1,6 +1,9 @@
-import EnemyHp from '../sprites/EnemyHp';
-import Bullet from '../sprites/Bullet';
+import EnemyHp from './EnemyHp';
+import Bullet from '../weapon/Bullet';
 
+import Item from '../item/Item';
+import Heart from '../item/Heart';
+import Coin from '../item/Coin';
 
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
@@ -12,6 +15,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.setImmovable(true);/*ぶつかっても影響を受けない*/
 
     this.isDamege = false;
+
+    this.type = "enemy";
 
     this._scene = config.scene;
 
@@ -44,14 +49,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       y: 0
     }
 
-    this.chasingPlayerTimerEvent;
-    this.shootingPlayerTimerEvent;
-
-    this.MONSTER_SPEED = 1;
-    this.MONSTER_HIT_DELAY = 100;
-    this.CHASING_DISTANCE = 60;
-    this.isStartled = false;
-
     /*==============================
     表示までOFF
     ==============================*/
@@ -72,127 +69,21 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       callback: this.appearEnemy,
       callbackScope: this
     });
+
+    this.dropItemList = [
+      [Coin, "coin"],
+      [Heart, "heart"]
+    ]
   }
 
   update(keys, time, delta) {
     if (!this.active) {
       return;
     }
-    this.handleChase();
     this.hp.move(this.x,this.y);
 
   }
-  handleChase() {
-    if (!this.chasingPlayerTimerEvent && this.shouldChase()) {
-      this.startChasing();
-      this.startShooting();
-      return;
-    }
 
-    if (this.chasingPlayerTimerEvent && !this.shouldChase()) {
-      this.stopChasing();
-      this.stopShooting();
-    }
-
-    // if (!this.shouldChase()) {
-    //   // this.wanderAround();
-    // }
-  }
-  shouldChase() {
-    const playerPoint = this.scene.player.getCenter();
-    const monsterPoint = this.getCenter();
-    const distance = monsterPoint.distance(playerPoint);
-
-    if (distance < this.CHASING_DISTANCE) {
-      return true;
-    }
-
-    if (this.isStartled) {
-      return true;
-    }
-
-    return false;
-  }
-  startChasing() {
-    this.chasingPlayerTimerEvent = this.scene.time.addEvent({
-      delay: 500,
-      callback: this.moveTowardsPlayer,
-      callbackScope: this,
-      repeat: Infinity,
-      startAt: 1000,
-    });
-  }
-  stopChasing() {
-    if (this.active) {
-      this.stopRunning();
-    }
-    // this.chasingPlayerTimerEvent.destroy();
-    this.chasingPlayerTimerEvent = null;
-  }
-  moveTowardsPlayer() {
-    if (!this.active) {
-      return;
-    }
-
-    const playerPoint = this.scene.player.getCenter();
-    const monsterPoint = this.getCenter();
-    var { x,y } = playerPoint.subtract(monsterPoint);
-
-    var rangeRadius = 10;
-    var radian = Math.atan2(x, y);
-    x = rangeRadius * Math.sin(radian);
-    y = rangeRadius * Math.cos(radian);
-
-    this.direction.x = x;
-    this.direction.y = y;
-
-    this.run(x, y);
-
-  }
-  run(x, y) {
-
-    if (x === 0 && y === 0) {
-      return;
-    }
-
-    if (!this.active) {
-      return;
-    }
-
-    this.setVelocityX(x * this.MONSTER_SPEED);
-    this.setVelocityY(y * this.MONSTER_SPEED);
-
-  }
-  stopRunning() {
-    if (!this.active) {
-      return;
-    }
-
-    this.setVelocity(0);
-    // this.beIdle();
-  }
-  startShooting() {
-    this.shootingPlayerTimerEvent = this.scene.time.addEvent({
-      delay: 1000,
-      callback: this.bullet,
-      callbackScope: this,
-      repeat: Infinity,
-      startAt: 1000,
-    });
-  }
-  stopShooting() {
-    if (!this.active) {
-      return;
-    }
-    if (this.active) {
-      this.stopRunning();
-    }
-    // this.shootingPlayerTimerEvent.destroy();
-    this.shootingPlayerTimerEvent.remove(false);
-    this.shootingPlayerTimerEvent = null;
-    this.direction.x = 0;
-    this.direction.y = 0;
-  }
   bullet(){
     if (!this.active) {
       return;
@@ -223,10 +114,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if(damage <= 0){
       damage = 1;
     }
-    this.hp.calc(damage*-1,this);
 
-    if (!this.active) {
-      return;
+
+    if(this.hp.active){
+      this.hp.calc(damage*-1,this);
+
     }
 
     this.damageText.text = damage;
@@ -251,6 +143,16 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.isDamege = true;
 
+    if (!this.hp.active) {
+      this.hp.explode();
+    }
+
+    if (!this.active) {
+      this.getExperience();
+      this.explode();
+      return;
+    }
+
     var enemy = this;
     var enemyDamageTween = this.scene.tweens.add({
       targets: this,
@@ -270,7 +172,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.experience = this.scene.experience + this.status.experience;
   }
   explode(){
-    this.active = false;
+    this.dropItem();
     this.destroy();
   }
   appearEnemy(){
@@ -284,7 +186,29 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       target: this,
       hp: this.status.hp
     });
+    this.hp.active = true;
     this.appearCircle.destroy();
   }
+  getRandomObjName(arr){
+    let random = arr[Math.floor(Math.random() * arr.length)];
+    return random;
+  }
+  dropItem(){
 
+    let itemName = this.getRandomObjName(this.dropItemList);
+
+    let itemObject = new itemName[0]({
+      scene: this._scene,
+      key: itemName[1],
+      x: this.x,
+      y: this.y,
+      mode: "dropEnemyItem"
+    });
+    itemObject.depth = 10;
+    this._scene.itemGroup.add(itemObject);
+
+  }
+  fireCollision(){
+    console.log("fireCollision");
+  }
 }

@@ -70,7 +70,6 @@ export default class ActiveTime extends Phaser.Physics.Arcade.Sprite{
         this.timedEventActive.remove(false);
         this.timedEventActive = null;
       }
-      // console.log("this.timedEventActive",this.timedEventActive);
       this.per = 0;
       this.store_power = 0;
       this.flg_per_max = false;

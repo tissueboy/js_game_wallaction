@@ -1,4 +1,4 @@
-import Calcs from '../helper/Calcs';
+import Calcs from '../../helper/Calcs';
 
 export default class Bullet extends Phaser.GameObjects.Sprite {
   constructor(config) {
@@ -74,12 +74,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     
 
 
-    /*==============================
-    デバッグ
-    ==============================*/
-    this.text = this.scene.add.text(10, 10, 'Use up to 4 fingers at once', { font: '8px Courier', fill: '#ff0000' });
-    this.text.depth = 100;
-    this.text.setScrollFactor(0,0);
+
 
   }
 

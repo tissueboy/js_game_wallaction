@@ -13,21 +13,7 @@ class TitleScene extends Phaser.Scene {
           frame: 'title',
       }]
     };
-    
-    // this.title_start = this.physics.add.sprite(0, 10, 'title_start');
 
-    console.log("this.game.config.width",this.game.config.width);
-
-    // this.start_text = this.add.text(0,0, "PC", {
-    //   fontFamily: 'monospace',
-    //   fontSize: 10,
-    //   fontStyle: 'bold',
-    //   color: '#FFFFFF',
-    //   align: 'center',
-    //   style:{
-    //   }
-    // });
-    // this.start_text.width = 10;
 
     this.start_text_pc = this.make.text({
         x: 80,
