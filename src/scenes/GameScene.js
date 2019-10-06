@@ -69,6 +69,7 @@ class GameScene extends Phaser.Scene {
     キー入力
     ==============================*/
     this.keypad;
+    console.log("this.registry.list.MODE",this.registry.list.MODE);
     if(this.registry.list.MODE === "PC"){
       this.keypad = new Keypad_PC({
         scene: this,
