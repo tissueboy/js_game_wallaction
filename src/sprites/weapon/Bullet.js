@@ -96,9 +96,9 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
 
   explode() {
     if(this.type === "player"){
-      this._scene.combo_count = 0;
-      this._scene.comboText.text = "x "+this._scene.combo_count;
+      // this._scene.combo.combo_count++;
     }
+    this.scene.combo.combo_count = 0;
     this.scene.bulletGroup.remove(this);
     this.scene.bulletEnemyGroup.remove(this);
     this.destroy();

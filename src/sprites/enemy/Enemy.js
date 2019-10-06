@@ -31,15 +31,14 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.damage_text = 0;
 
-    this.damageText = this.scene.add.text(this.x, this.y, this.damage_text, {
-      fontFamily: 'monospace',
-      fontSize: 10,
-      fontStyle: 'bold',
-      color: '#FFFFFF',
-      align: 'center',
-      style:{
-      }
-    });
+
+    this.damageText = this.scene.add.bitmapText(
+      this.x,
+      this.y,
+      'bitmapFont',
+      this.damage_text,
+      30
+    );
 
     this.damageText.setVisible(false);
     this.damageText.depth = 14;
@@ -110,6 +109,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
   damage(num){
 
+    this.scene.combo.hit();  
+
     let damage = num - this.status.defense;
     if(damage <= 0){
       damage = 1;
@@ -118,24 +119,26 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     if(this.hp.active){
       this.hp.calc(damage*-1,this);
-
     }
+
+        
 
     this.damageText.text = damage;
     this.damageText.x = this.x - this.body.halfWidth;
-    this.damageText.y = this.y - this.height * 1.0;
+    this.damageText.y = this.y - this.height * 1.8;
     this.damageText.setVisible(true);
 
     var _damageText = this.damageText;
     var _damageText_x = this.damageText.x;
-    var _damageText_y = this.damageText.y - this.height * 0.6;
+    var _damageText_y = this.y - this.height * 1.4;
 
     var damageTween = this.scene.tweens.add({
         targets: _damageText,
         y: _damageText_y,
         ease: 'liner',
-        duration: 200,
+        duration: 100,
         repeat: 0,
+        completeDelay: 400,
         onComplete: function () {
           _damageText.setVisible(false);
         },

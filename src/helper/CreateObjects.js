@@ -39,8 +39,8 @@ export default class CreateObjects  extends Phaser.Time.TimerEvent{
       [Bad,"bad"]
     ];
     this.objListItem = [
-      [Heart,"heart"],
-      [Coin,"coin"],
+      // [Heart,"heart"],
+      // [Coin,"coin"],
       [Fire,"fire"]
     ];
   }

@@ -4,11 +4,10 @@ import Hp from '../helper/Hp';
 import ActiveTime from '../helper/ActiveTime';
 import CollisionCheck from '../helper/CollisionCheck';
 import CreateObjects from '../helper/CreateObjects';
-
+import ComboCount from '../helper/ComboCount';
 
 import Player from '../sprites/player/Player';
-import Boss from '../sprites/boss/Boss';
-import Boss1 from '../sprites/boss/Boss1';
+import Boss1 from '../sprites/enemy/Boss1';
 
 
 
@@ -103,68 +102,46 @@ class GameScene extends Phaser.Scene {
     /*==============================
     UI | コンボカウンター
     ==============================*/
-    this.combo_count = 0;
 
-    this.comboText = this.add.text(this.game.config.width/2+20,15, "x "+this.combo_count, {
-      fontFamily: 'monospace',
-      fontSize: 10,
-      fontStyle: 'bold',
-      color: '#FFFFFF',
-      align: 'center',
-      style:{
-      }
+    this.combo = new ComboCount({
+      scene: this,
+      key: 'combo'
     });
+    this.combo.depth = 104;
 
-    this.comboText.depth = 104;
-
-    this.comboText.setScrollFactor(0,0);
 
     /*==============================
     UI | コイン
     ==============================*/
     this.coin_count = 0;
 
-    this.coinText = this.add.text(this.game.config.width/2+20,5, "x "+this.coin_count, {
-      fontFamily: 'monospace',
-      fontSize: 10,
-      fontStyle: 'bold',
-      color: '#FFFFFF',
-      align: 'center',
-      style:{
-      }
-    });
+    this.coinText = this.add.bitmapText(
+      30,
+      40,
+      'bitmapFont',
+      this.coin_count,
+      30
+    );
 
     this.coinText.depth = 104;
 
     this.coinText.setScrollFactor(0,0);
 
-    this.coinIcon = this.add.sprite(this.game.config.width/2+10,12, 'ui_coin_icon');
+    this.coinIcon = this.add.sprite(20,46, 'ui_coin_icon');
     this.coinIcon.setScrollFactor(0,0);
     this.coinIcon.depth = 104;
+
+    this.coin_bg_graphics = this.add.graphics({ fillStyle: { color: 0x000000 }});
+    this.coin_bg_rect = new Phaser.Geom.Rectangle(10, 40, this.game.config.width / 4, 12);
+    this.coin_bg_graphics.fillRectShape(this.coin_bg_rect);
+    this.coin_bg_graphics.depth = 100;
+    this.coin_bg_graphics.alpha = 0.6;
 
 
     /*==============================
     UI | レベル
     ==============================*/
     this.level_count = 0;
-
-    this.levelText = this.add.text(this.game.config.width/4*3+20,5, "x "+this.level_count, {
-      fontFamily: 'monospace',
-      fontSize: 10,
-      fontStyle: 'bold',
-      color: '#FFFFFF',
-      align: 'center',
-      style:{
-      }
-    });
-
-    this.levelText.depth = 104;
-
-    this.levelText.setScrollFactor(0,0);
-
-    this.levelIcon = this.add.sprite(this.game.config.width/4*3+10,12, 'ui_level_icon');
-    this.levelIcon.setScrollFactor(0,0);
-    this.levelIcon.depth = 104;
 
     /*==============================
     UI | 経験値
@@ -187,6 +164,13 @@ class GameScene extends Phaser.Scene {
 
     this.spellGroup = this.add.group();
     this.spellGroup.depth = 5;
+
+    this.boss1 = new Boss1({
+      scene: this,
+      key: 'boss1',
+      x: 100,
+      y: 80
+    });
 
     // this.parseObjectLayers();
 
@@ -233,6 +217,10 @@ class GameScene extends Phaser.Scene {
         sprite.update(time, delta);
       }
     );
+
+    if(this.boss1.active == true){
+      this.boss1.update(time, delta);
+    }
     
     this.keypad.update(this.input);
 
@@ -240,12 +228,9 @@ class GameScene extends Phaser.Scene {
 
   }
   createBoss(){
-    this.boss1 = new Boss1({
-      scene: this,
-      key: 'boss1',
-      x: 40,
-      y: 100
-    });
+
+    this.boss1.active = true;
+
     this.createObjects.createObjTimerEvent.remove(false);
     this.createObjects.createObjTimerEvent = false;
 

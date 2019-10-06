@@ -6,7 +6,7 @@ import GameScene from './scenes/GameScene';
 const config = {
   type: Phaser.WEBGL,
   pixelArt: true,
-  roundPixels: true,
+  // roundPixels: true,
   parent: 'content',
   width: 192,
   height: 320,
@@ -27,4 +27,5 @@ const config = {
   ]
 };
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(config);        
+

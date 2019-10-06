@@ -14,7 +14,7 @@ export default class Coin extends Item {
   // }
   hit(){
     this.scene.coin_count = this.scene.coin_count + this.coinPoint;
-    this.scene.coinText.text = "x "+this.scene.coin_count;
+    this.scene.coinText.text = this.scene.coin_count;
     // this.scene.coin.calc(this.coinPoint);
     this.destroy();
   }

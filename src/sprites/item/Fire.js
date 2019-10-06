@@ -72,15 +72,14 @@ export default class Fire extends Item {
         // area.fillCircleShape(circle);
         // area.depth = 10;
         // area.alpha = 0.5;
-        let radius = 30;
-
-
+        let radius = 46;
 
         this.scene.enemyGroup.children.entries.forEach(
           (sprite) => {
             if(radius*radius >= (sprite.x - obj.x)*(sprite.x - obj.x) + (sprite.y - obj.y)*(sprite.y - obj.y)){
               if(sprite.active){
                 sprite.damage(item.attackPoint);
+                // this.scene.combo.hit();
               }
             }
           }
@@ -129,9 +128,11 @@ export default class Fire extends Item {
   }
   callbacks(timer,area){
     console.log("callbacks");
+    this.scene.combo.combo_count = 0;
     // area.clear();
     this.scene.spellGroup.children.entries.forEach(
       (sprite) => {
+
         sprite.destroy();
     });
     // timer.destroy();

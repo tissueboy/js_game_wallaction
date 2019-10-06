@@ -8,7 +8,7 @@ export default class EnemyHp {
     this.hpMax = config.hp;
     this.active = false;
 
-    this.hp_bar = config.scene.add.sprite(0, 0, 'hp_bar');
+    this.hp_bar = config.scene.add.sprite(0, 0, 'hp_bar_s');
     this.hp_bar.displayWidth = this.taget.body.width;
     this.hp_bar.displayWidthMax = this.taget.body.width;
     this.hp_bar.displayOriginX = 0;
@@ -17,7 +17,7 @@ export default class EnemyHp {
     this.hp_bar.y = this.taget.y - this.taget.body.halfHeight - this.hp_bar.height * 1.5;
     this.hp_bar.depth = 10;
 
-    this.hp_bar_bg = config.scene.add.sprite(0, 0, 'hp_bar');
+    this.hp_bar_bg = config.scene.add.sprite(0, 0, 'hp_bar_s');
     this.hp_bar_bg.displayWidth = this.taget.body.width;
     this.hp_bar_bg.displayWidthMax = this.taget.body.width;
     this.hp_bar_bg.displayOriginX = 0;
@@ -42,7 +42,7 @@ export default class EnemyHp {
     if(this.hp <= 0){
       this._scene.combo_count++;
       if(this._scene.combo_count >= 2){
-        this._scene.comboText.text = "x "+this._scene.combo_count;        
+        this._scene.comboText.text = this._scene.combo_count;        
       }
       this.active = false;
       obj.active = false;

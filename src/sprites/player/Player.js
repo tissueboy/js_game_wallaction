@@ -58,15 +58,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     this.damage_text = 0;
 
-    this.damageText = this.scene.add.text(this.x, this.y, this.damage_text, {
-      fontFamily: 'monospace',
-      fontSize: 10,
-      fontStyle: 'bold',
-      color: '#FF0000',
-      align: 'center',
-      style:{
-      }
-    });
+    this.damageText = this.scene.add.bitmapText(
+      this.x,
+      this.y,
+      'bitmapFont',
+      this.damage_text,
+      30
+    );
 
     this.damageText.setVisible(false);
 

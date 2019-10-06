@@ -1,15 +1,15 @@
-import Boss from './Boss';
+import Enemy from './Enemy';
 
-export default class Boss1 extends Boss {
+export default class Boss1 extends Enemy {
 
   constructor(config) {
 
     super(config);
 
     this.status = {
-      hp: 2,
+      hp: 20,
       power: 5,
-      defense: 2,
+      defense: 6,
       experience: 10,
       attackPoint: 1
     }
