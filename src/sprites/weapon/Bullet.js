@@ -72,9 +72,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
     this.scaleX = this.scaleX * config.scale;
     this.scaleY = this.scaleY * config.scale;
     
-
-
-
+    // this.body.setCircle(this.body.width*config.scale);
 
   }
 

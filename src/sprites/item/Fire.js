@@ -6,7 +6,6 @@ export default class Fire extends Item {
     super(config);
     // this.recoveryPoint = 1;
     this.scene = config.scene;
-    this.attached = false;
     this.throwed = false;
     this.speed = 10;
     this.hitCount = 0;
@@ -27,7 +26,7 @@ export default class Fire extends Item {
   }
 
   update(){
-    if(this.attached === true){
+    if(this.scene.player.attach === this){
 
       this.x = this.scene.player.x;
       this.y = this.scene.player.y;
@@ -35,19 +34,18 @@ export default class Fire extends Item {
 
     }
   }
-  hit(){
+  hit(player,obj){
     // this.scene.hp.calc(this.recoveryPoint);
     // this.destroy();
+    console.log("hit "+this.scene.player.attached+"/this.hitCount="+this.hitCount);
     if(this.hitCount > 0){
       return;
     }
     this.hitCount++;
-    if(this.attached === true){
+    if(this.scene.player.attached){
       return;
     }else{
-      this.attached = true;      
-    }
-    if(!this.scene.player.attach){
+      this.scene.player.attached = true;      
       this.scene.player.attach = this;
     }
   }
@@ -61,56 +59,59 @@ export default class Fire extends Item {
       return;
     }
 
-    if(this.throwed === true){
-      if(obj === this.scene.groundLayer){
-        // console.log("checkCollision groundLayer");
-      } 
-      if(obj.type === "enemy"){
-        console.log("checkCollision enemyGroup");
-        // let circle = new Phaser.Geom.Circle(obj.x, obj.y, 30);//x,y.size
-        // let area = this.scene.add.graphics({ fillStyle: { color: 0xFFFFFF } });
-        // area.fillCircleShape(circle);
-        // area.depth = 10;
-        // area.alpha = 0.5;
-        let radius = 46;
+    let target = {
+      x: 0,
+      y: 0
+    }
 
-        this.scene.enemyGroup.children.entries.forEach(
-          (sprite) => {
-            if(radius*radius >= (sprite.x - obj.x)*(sprite.x - obj.x) + (sprite.y - obj.y)*(sprite.y - obj.y)){
-              if(sprite.active){
-                sprite.damage(item.attackPoint);
-                // this.scene.combo.hit();
-              }
+    if(this.throwed === true){
+      if(obj.type === "enemy"){
+        target.x = obj.x;
+        target.y = obj.y;
+      }else{
+        target.x = item.x;
+        target.y = item.y;
+      }
+      let radius = 46;
+
+      this.scene.enemyGroup.children.entries.forEach(
+        (sprite) => {
+          if(radius*radius >= (sprite.x - target.x)*(sprite.x - target.x) + (sprite.y - target.y)*(sprite.y - target.y)){
+            if(sprite.active){
+              sprite.damage(item.attackPoint);
             }
           }
-        );
-        // this.visible = false;
-        let area = new FireArea({
-          scene: this.scene,
-          x: obj.x,
-          y: obj.y,
-          key: 'fire_area'
-        });
-        area.depth = 2;
-        this.scene.spellGroup.add(area);
+        }
+      );
+      let area = new FireArea({
+        scene: this.scene,
+        x: target.x,
+        y: target.y,
+        key: 'fire_area'
+      });
+      area.depth = 2;
+      this.scene.spellGroup.add(area);
 
 
-        let areaTimer2 = this.scene.time.delayedCall(
-          1000,
-          function(){
-            console.log("callbacks");
-            // area.clear();
-            this.scene.spellGroup.children.entries.forEach(
-              (sprite) => {
-                sprite.destroy();
-            });
-          },
-          [],
-          this
-        ); 
+      let areaTimer2 = this.scene.time.delayedCall(
+        1000,
+        function(){
+          console.log("callbacks");
+          // area.clear();
+          this.scene.spellGroup.children.entries.forEach(
+            (sprite) => {
+              sprite.destroy();
+          });
+          this.scene.itemGroup.children.entries.forEach(
+            (sprite) => {
+              sprite.hitCount = 0;
+          });
+          this.destroy();
+        },
+        [],
+        this
+      ); 
 
-      }
-      this.attached = false;
       this.throwed = false;
       this.attack_once = true;
       this.visible = false;
@@ -121,27 +122,7 @@ export default class Fire extends Item {
   }
   area_x_enemy_Collision(area,enemy){
     enemy.alpha = 0.4;
-    // fire.count++;
-    // console.log("enemy",enemy);
-    // enemy.damage(area.attackPoint);
-    // scene.debugText.text = String(scene.count);
-  }
-  callbacks(timer,area){
-    console.log("callbacks");
-    this.scene.combo.combo_count = 0;
-    // area.clear();
-    this.scene.spellGroup.children.entries.forEach(
-      (sprite) => {
 
-        sprite.destroy();
-    });
-    // timer.destroy();
-    // timer = null;
-    // fire.scene.enemyGroup.children.entries.forEach(
-    //   (sprite) => {
-    //     console.log(sprite);
-    //   }
-    // );
-    // fire.areaTimer.remove(false);
   }
+
 }

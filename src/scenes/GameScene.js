@@ -14,12 +14,10 @@ import Boss1 from '../sprites/enemy/Boss1';
 class GameScene extends Phaser.Scene {
   constructor(test) {
     super({
-        key: 'GameScene'
+      key: 'GameScene'
     });
   }
   create(){
-
-    console.log("this",this);
 
     /*==============================
     ステージの表示
@@ -31,8 +29,10 @@ class GameScene extends Phaser.Scene {
     this.groundLayer.setCollisionByProperty({ collides: true });
     this.groundLayer.depth = 1;
 
+    // this.groundLayer.visible = false;
+
     this.objectLayer = this.map.createDynamicLayer('object', this.tileset, 0, 0);
-    // this.objectLayer.setCollisionBetween(2, 2);
+    this.objectLayer.setCollisionBetween(0, 2);
     this.objectLayer.setCollisionByProperty({ collides: true });
     this.objectLayer.depth = 2;
 
@@ -69,7 +69,6 @@ class GameScene extends Phaser.Scene {
     キー入力
     ==============================*/
     this.keypad;
-    console.log("this.registry.list.MODE",this.registry.list.MODE);
     if(this.registry.list.MODE === "PC"){
       this.keypad = new Keypad_PC({
         scene: this,
@@ -156,6 +155,12 @@ class GameScene extends Phaser.Scene {
     this.bulletGroup.depth = 13;
     this.bulletEnemyGroup = this.add.group();
     this.bulletEnemyGroup.depth = 14;
+    this.anims.create({
+      key: 'explosionAnime_m',
+      frames: this.anims.generateFrameNumbers('explosion_m', { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: 0
+    });
 
     this.enemyGroup = this.add.group();
     this.enemyGroup.depth = 10;

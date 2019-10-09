@@ -72,6 +72,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.attach;
 
+    this.attacked = false;
+
 
 
   }
@@ -121,20 +123,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
-      console.log("this.attach",this.attach);
+      // console.log("this.attach",this.attach);
       if(this.setWeapon === "bullet" && !this.attach && this.scene.active_time.active){
         this.bullet();
       }
       
-      if(this.attach){
-        this.attach.attached = false;
+      if(this.attached){
+        this.attached = false;
         this.attach.throwItem({
           x: this.x,
           y: this.y,
           vx: this.shotVelocity.x,
           vy: this.shotVelocity.y,          
         });
-        this.attach = null;
+        this.attach = "";
       }
 
 

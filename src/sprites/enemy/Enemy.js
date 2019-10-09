@@ -1,5 +1,6 @@
 import EnemyHp from './EnemyHp';
 import Bullet from '../weapon/Bullet';
+import Explode from '../Explode';
 
 import Item from '../item/Item';
 import Heart from '../item/Heart';
@@ -28,6 +29,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       attackPoint: 2
     }
     this.hp;
+
+    this.explodeSprite;
 
     this.damage_text = 0;
 
@@ -76,10 +79,15 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(keys, time, delta) {
-    if (!this.active) {
-      return;
+    // if (!this.active) {
+    //   return;
+    // }
+    if (this.active) {
+      this.hp.move(this.x,this.y);
     }
-    this.hp.move(this.x,this.y);
+    if(this.explodeAnime){
+      this.explodeAnime.update(time, delta);
+    }
 
   }
 
@@ -121,8 +129,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.hp.calc(damage*-1,this);
     }
 
-        
-
     this.damageText.text = damage;
     this.damageText.x = this.x - this.body.halfWidth;
     this.damageText.y = this.y - this.height * 1.8;
@@ -146,16 +152,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.isDamege = true;
 
-    if (!this.hp.active) {
-      this.hp.explode();
-    }
-
-    if (!this.active) {
-      this.getExperience();
-      this.explode();
-      return;
-    }
-
     var enemy = this;
     var enemyDamageTween = this.scene.tweens.add({
       targets: this,
@@ -170,13 +166,33 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     setTimeout(stop, 600);
 
+    if (!this.hp.active) {
+      this.hp.explode();
+    }
+
+    if (!this.active) {
+      this.visible = false;
+      this.explodeSprite = new Explode({
+        scene: this.scene,
+        key: "explosionAnime_m",
+        x: this.x,
+        y: this.y,
+        target: this 
+      });
+      // this.explodeSprite.explode();
+    }
   }
   getExperience(){
     this.scene.experience = this.scene.experience + this.status.experience;
   }
   explode(){
-    this.dropItem();
-    this.destroy();
+    
+      this.explodeSprite.destroy();
+      this.getExperience();
+      this.dropItem();
+      this.destroy();
+    
+    // this.destroy();
   }
   appearEnemy(){
     this.active = true;

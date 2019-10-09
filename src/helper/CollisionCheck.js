@@ -3,8 +3,10 @@ export default class CollisionCheck{
 
     var _this = config.scene;
     this._scene = config.scene;
+    _this.physics.add.collider(_this.player,_this.objectLayer);
     _this.physics.add.collider(_this.player,_this.groundLayer);
     _this.physics.add.collider(_this.enemyGroup,_this.groundLayer);
+    _this.physics.add.collider(_this.enemyGroup,_this.objectLayer);
 
     _this.physics.add.overlap(_this.player,_this.enemyGroup,this.player_x_Enemy_Collision);
     _this.physics.add.overlap(_this.player,_this.bulletEnemyGroup,this.player_x_EnemyBullet_Collision);
@@ -12,9 +14,9 @@ export default class CollisionCheck{
     _this.physics.add.overlap(_this.enemyGroup,_this.bulletGroup,this.enemy_x_playerBullet_Collision);
     _this.physics.add.overlap(_this.player,_this.itemGroup,this.player_x_item_Collision);
 
-    _this.physics.add.collider(_this.bulletGroup,_this.groundLayer,this.bulletBounceCollision);
+    _this.physics.add.collider(_this.bulletGroup,_this.objectLayer,this.bulletBounceCollision);
 
-    _this.physics.add.overlap(_this.itemGroup,_this.groundLayer,this.item_x_ground_Collision);
+    _this.physics.add.collider(_this.itemGroup,_this.objectLayer,this.item_x_objectGround_Collision);
     _this.physics.add.overlap(_this.itemGroup,_this.enemyGroup,this.item_x_enemy_Collision);
 
     _this.physics.add.overlap(_this.itemGroup,_this.boss1,this.item_x_enemy_Collision);
@@ -47,10 +49,13 @@ export default class CollisionCheck{
     if(!obj.active){
       return;
     }
-    obj.hit(player);
+    obj.hit(player,obj);
   }
   item_x_ground_Collision(item,obj){
     // item.checkCollision(item,obj);
+  }
+  item_x_objectGround_Collision(item,obj){
+    item.checkCollision(item,obj);
   }
   item_x_enemy_Collision(item,enemy){
     if(!enemy.active){

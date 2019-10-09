@@ -14,10 +14,11 @@ const config = {
     default: 'arcade',
     arcade: {
       // fps: 30,
+      debug: true,
       gravity: {
           y: 0
       },
-      debug: true
+      
     }
   },
   scene: [

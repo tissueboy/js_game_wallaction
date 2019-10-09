@@ -45,7 +45,6 @@ export default class ComboCount extends Phaser.Physics.Arcade.Sprite{
     var _this = this;
     this.combo_count++;
     this.comboText.text = this.combo_count;
-    console.log("this.combo_count",this.combo_count);
     if(this.combo_count > 1){
       this.comboHit.visible = true;
       this.comboText.visible = true;
