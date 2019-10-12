@@ -6,6 +6,8 @@ export default class Boss1 extends Enemy {
 
     super(config);
 
+    this.type = "boss";
+
     this.status = {
       hp: 20,
       power: 5,

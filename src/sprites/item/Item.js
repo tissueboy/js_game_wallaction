@@ -18,6 +18,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
     this.circle;
     this.appearCircle;
     this.hitCount = 0;
+
     /*==============================
     表示までOFF
     ==============================*/

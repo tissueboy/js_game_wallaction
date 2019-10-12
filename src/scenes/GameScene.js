@@ -5,6 +5,8 @@ import ActiveTime from '../helper/ActiveTime';
 import CollisionCheck from '../helper/CollisionCheck';
 import CreateObjects from '../helper/CreateObjects';
 import ComboCount from '../helper/ComboCount';
+import ClearStage from '../helper/ClearStage';
+import Menu from '../helper/Menu';
 
 import Player from '../sprites/player/Player';
 import Boss1 from '../sprites/enemy/Boss1';
@@ -22,19 +24,20 @@ class GameScene extends Phaser.Scene {
     /*==============================
     ステージの表示
     ==============================*/
-    this.map = this.make.tilemap({ key: 'map',tileWidth: 16, tileHeight: 16});
+    this.stageNumber = this.registry.list.stage;
+    this.map = this.make.tilemap({ key: 'map'+this.stageNumber,tileWidth: 16, tileHeight: 16});
     this.tileset = this.map.addTilesetImage('tileset', 'tiles');
     this.groundLayer = this.map.createDynamicLayer('ground', this.tileset, 0, 0);
     this.groundLayer.setCollisionBetween(0, 2);
     this.groundLayer.setCollisionByProperty({ collides: true });
     this.groundLayer.depth = 1;
 
-    // this.groundLayer.visible = false;
-
     this.objectLayer = this.map.createDynamicLayer('object', this.tileset, 0, 0);
     this.objectLayer.setCollisionBetween(0, 2);
     this.objectLayer.setCollisionByProperty({ collides: true });
     this.objectLayer.depth = 2;
+
+
 
     this.player = new Player({
       scene: this,
@@ -44,6 +47,16 @@ class GameScene extends Phaser.Scene {
       hp: this.hp,
     });
     this.player.depth = 11;
+    if(!this.registry.list.weapon){
+      this.registry.set('weapon', "bullet");
+    }
+    this.player.weapon = this.registry.list.weapon;
+
+    this.hasItemList = [];
+    if(this.registry.list.hasItemList){
+      this.hasItemList = this.registry.list.hasItemList;
+    }
+
 
     /*==============================
     モンスターの生成
@@ -58,7 +71,7 @@ class GameScene extends Phaser.Scene {
     ==============================*/
 
     this.createBossTimerEvent = this.time.addEvent({
-      delay: 10000,
+      delay: 5000,
       callback: this.createBoss,
       callbackScope: this,
       startAt: 0,
@@ -100,6 +113,18 @@ class GameScene extends Phaser.Scene {
     });
 
     /*==============================
+    UI | メニュー
+    ==============================*/
+
+    this.menu = new Menu({
+      scene: this,
+      x: 10,
+      y: 60,
+      key: 'menu'
+    });
+    this.menu.depth = 120;
+
+    /*==============================
     UI | コンボカウンター
     ==============================*/
 
@@ -113,7 +138,7 @@ class GameScene extends Phaser.Scene {
     /*==============================
     UI | コイン
     ==============================*/
-    this.coin_count = 0;
+    this.coin_count = this.registry.list.coin ? this.registry.list.coin : 0;
 
     this.coinText = this.add.bitmapText(
       30,
@@ -155,13 +180,37 @@ class GameScene extends Phaser.Scene {
     this.bulletGroup.depth = 13;
     this.bulletEnemyGroup = this.add.group();
     this.bulletEnemyGroup.depth = 14;
-    this.anims.create({
-      key: 'explosionAnime_m',
-      frames: this.anims.generateFrameNumbers('explosion_m', { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: 0
-    });
 
+    /*==============================
+    UI | ステージクリア
+    ==============================*/
+    this.clearStageObj = new ClearStage({
+      scene: this
+    });
+    this.clearStageObj.depth = 100;
+
+    /*==============================
+    アニメーションの設定
+    ==============================*/
+    if(this.stageNumber === '1'){
+      this.anims.create({
+        key: 'explosionAnime_m',
+        frames: this.anims.generateFrameNumbers('explosion_m', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: 0
+      });
+      this.anims.create({
+        key: 'badAnime',
+        frames: this.anims.generateFrameNumbers('bad', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+      });      
+    }
+
+
+    /*==============================
+    GROUP管理
+    ==============================*/
     this.enemyGroup = this.add.group();
     this.enemyGroup.depth = 10;
 
@@ -171,12 +220,8 @@ class GameScene extends Phaser.Scene {
     this.spellGroup = this.add.group();
     this.spellGroup.depth = 5;
 
-    this.boss1 = new Boss1({
-      scene: this,
-      key: 'boss1',
-      x: 100,
-      y: 80
-    });
+    this.bossGroup = this.add.group();
+    this.bossGroup.depth = 14;
 
     // this.parseObjectLayers();
 
@@ -224,9 +269,11 @@ class GameScene extends Phaser.Scene {
       }
     );
 
-    if(this.boss1.active == true){
-      this.boss1.update(time, delta);
-    }
+    this.bossGroup.children.entries.forEach(
+      (sprite) => {
+        sprite.update(time, delta);
+      }
+    );
     
     this.keypad.update(this.input);
 
@@ -235,14 +282,38 @@ class GameScene extends Phaser.Scene {
   }
   createBoss(){
 
-    this.boss1.active = true;
+    let boss = new Boss1({
+      scene: this,
+      key: 'boss1',
+      x: 100,
+      y: 80,
+      type: "boss"
+    });
+    // boss.active = true;
+    boss.depth = 10;
+    boss.appearEnemy(boss);
+
+    this.bossGroup.add(boss);
+
 
     this.createObjects.createObjTimerEvent.remove(false);
     this.createObjects.createObjTimerEvent = false;
 
-    this.boss1.depth = 11;
     this.createBossTimerEvent.remove(false);
     this.createBossTimerEvent = null;
+  }
+  clearStageDisplay(){
+    this.clearStageObj.container.visible = true;
+
+  }
+  pauseGame(){
+    this.scene.pause('GameScene');
+  }
+  resumeGame(){
+    this.scene.resume('GameScene');
+  }
+  refleshGame(){
+    this.scene.start('GameScene');
   }
 }
 

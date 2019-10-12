@@ -65,11 +65,10 @@ export default class Brain extends Enemy {
   }
   startChasing() {
     this.chasingPlayerTimerEvent = this.scene.time.addEvent({
-      delay: 500,
+      delay: 1000,
       callback: this.moveTowardsPlayer,
       callbackScope: this,
-      repeat: Infinity,
-      startAt: 1000,
+      repeat: Infinity
     });
   }
   stopChasing() {
@@ -126,8 +125,7 @@ export default class Brain extends Enemy {
       delay: 1000,
       callback: this.bullet,
       callbackScope: this,
-      repeat: Infinity,
-      startAt: 1000,
+      repeat: Infinity
     });
   }
   stopShooting() {

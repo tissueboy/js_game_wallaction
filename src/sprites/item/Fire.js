@@ -35,9 +35,6 @@ export default class Fire extends Item {
     }
   }
   hit(player,obj){
-    // this.scene.hp.calc(this.recoveryPoint);
-    // this.destroy();
-    console.log("hit "+this.scene.player.attached+"/this.hitCount="+this.hitCount);
     if(this.hitCount > 0){
       return;
     }
@@ -96,7 +93,6 @@ export default class Fire extends Item {
       let areaTimer2 = this.scene.time.delayedCall(
         1000,
         function(){
-          console.log("callbacks");
           // area.clear();
           this.scene.spellGroup.children.entries.forEach(
             (sprite) => {
@@ -106,6 +102,7 @@ export default class Fire extends Item {
             (sprite) => {
               sprite.hitCount = 0;
           });
+          this.scene.combo.combo_count = 0;
           this.destroy();
         },
         [],

@@ -17,11 +17,13 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
       config.type
     );
 
+    this.attribute = "weapon";
+
     this.type = config.type;
     this._scene = config.scene;
 
     // this.texture.
-    this.setTexture("bullet");
+    // this.setTexture("bullet");
 
     // this.scene.anims.create({
     //   key: 'bulletAnime',

@@ -24,8 +24,6 @@ export default class CreateObjects  extends Phaser.Time.TimerEvent{
       startAt: 1000,
     });
 
-    
-
     this.min_x = 2;
     this.max_x = 10;
     this.min_y = 2;
@@ -35,7 +33,7 @@ export default class CreateObjects  extends Phaser.Time.TimerEvent{
     this.appear_max_length = 3;
 
     this.objListEnemy = [
-      [Brain,"brain"],
+      // [Brain,"brain"],
       [Bad,"bad"]
     ];
     this.objListItem = [

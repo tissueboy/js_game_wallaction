@@ -186,11 +186,16 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.experience = this.scene.experience + this.status.experience;
   }
   explode(){
-    
-      this.explodeSprite.destroy();
-      this.getExperience();
-      this.dropItem();
-      this.destroy();
+
+    let type = this.type;
+
+    if(type === "boss"){
+      this.scene.clearStageDisplay();
+    }    
+    this.explodeSprite.destroy();
+    this.getExperience();
+    this.dropItem();
+    this.destroy();
     
     // this.destroy();
   }
@@ -207,6 +212,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     });
     this.hp.active = true;
     this.appearCircle.destroy();
+    this.appearEnemyAfter();
+  }
+  appearEnemyAfter(){
+
   }
   getRandomObjName(arr){
     let random = arr[Math.floor(Math.random() * arr.length)];
@@ -228,6 +237,5 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   }
   fireCollision(){
-    console.log("fireCollision");
   }
 }

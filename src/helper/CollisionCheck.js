@@ -19,8 +19,8 @@ export default class CollisionCheck{
     _this.physics.add.collider(_this.itemGroup,_this.objectLayer,this.item_x_objectGround_Collision);
     _this.physics.add.overlap(_this.itemGroup,_this.enemyGroup,this.item_x_enemy_Collision);
 
-    _this.physics.add.overlap(_this.itemGroup,_this.boss1,this.item_x_enemy_Collision);
-    _this.physics.add.overlap(_this.boss1,_this.bulletGroup,this.enemy_x_playerBullet_Collision);
+    _this.physics.add.overlap(_this.itemGroup,_this.bossGroup,this.item_x_enemy_Collision);
+    _this.physics.add.overlap(_this.bossGroup,_this.bulletGroup,this.enemy_x_playerBullet_Collision);
 
 
   }

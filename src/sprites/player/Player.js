@@ -1,11 +1,19 @@
 import Bullet from '../weapon/Bullet';
 import Sword from '../weapon/Sword';
+import Axe from '../weapon/Axe';
 import Calcs from '../../helper/Calcs';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(config) {
 
-    super(config.scene, config.x, config.y, config.key,config.hp);
+    super(
+      config.scene,
+      config.x,
+      config.y,
+      config.key,
+      config.frame,
+      config.hp
+    );
 
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
@@ -44,7 +52,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.line_x = 0;
     this.line_y = 0;
 
-    this.setWeapon = "bullet";
+    this.weapon;
 
     this.isDamege = false;
 
@@ -53,7 +61,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     this.status = {
       hp: 10,
-      power: 2,
+      power: 20,
       defense: 1
     }
     this.damage_text = 0;
@@ -101,7 +109,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     /*==============================
     発射の方向表示
     ==============================*/
-    // console.log("keys.VECTOR2",keys.VECTOR2);
+
     if(keys.isTOUCH2 === true){
       this.scope.setVisible(true);
       this.playerShotLine.clear();
@@ -123,8 +131,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if(keys.isRELEASE2 === true && this.countTouch === 0){
       this.countTouch++;
       this.shotVelocity = keys.VECTOR2;
-      // console.log("this.attach",this.attach);
-      if(this.setWeapon === "bullet" && !this.attach && this.scene.active_time.active){
+      if(!this.attach && this.scene.active_time.active){
         this.bullet();
       }
       
@@ -150,17 +157,41 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   }
   bullet(){
-    var bullet = new Bullet({
-      scene: this.scene,
-      x: this.x,
-      y: this.y,
-      vx: this.shotVelocity.x,
-      vy: this.shotVelocity.y,
-      target: this,
-      power: this.status.power + this.status.power*this.scene.active_time.per,
-      scale: 1 + this.status.power*this.scene.active_time.per,
-      type: "player"
-    });
+    let bullet;
+    if(this.weapon === "bullet"){
+      bullet = new Bullet({
+        scene: this.scene,
+        x: this.x,
+        y: this.y,
+        key: "bullet",
+        vx: this.shotVelocity.x,
+        vy: this.shotVelocity.y,
+        target: this,
+        power: this.status.power ,
+        scale: 1,
+        //ための場合
+        // power: this.status.power + this.status.power*this.scene.active_time.per,
+        // scale: 1 + this.status.power*this.scene.active_time.per,
+        type: "player"
+      });      
+    }
+    if(this.weapon === "axe"){
+      bullet = new Axe({
+        scene: this.scene,        
+        x: this.x,
+        y: this.y,
+        key: "axe",
+        vx: this.shotVelocity.x,
+        vy: this.shotVelocity.y,
+        target: this,
+        power: this.status.power ,
+        scale: 1,
+        //ための場合
+        // power: this.status.power + this.status.power*this.scene.active_time.per,
+        // scale: 1 + this.status.power*this.scene.active_time.per,
+        type: "player"
+      });      
+    }
     // bullet.loadTexture('bullet');
     this.scene.bulletGroup.add(bullet);   
     this.scene.active_time.bar = 0;

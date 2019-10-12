@@ -14,12 +14,15 @@ class TitleScene extends Phaser.Scene {
       }]
     };
 
-
     this.start_text_pc = this.add.bitmapText(
-      0, 100,'bitmapFont','',30
+      this.scene.systems.game.config.width/2,
+      100,
+      'bitmapFont',
+      '',
+      30
     );
-    this.start_text_pc.setInteractive()
-    // this.start_text_pc.setOrigin(0.5).setCenterAlign().setInteractive();
+    this.start_text_pc.setOrigin(0.5,0.5);
+    this.start_text_pc.setInteractive();
     this.start_text_pc.depth = 100;
     this.start_text_pc.getTextBounds(true);
     // this.start_text_pc.setText(
@@ -35,8 +38,13 @@ class TitleScene extends Phaser.Scene {
     );
 
     this.start_text_sph = this.add.bitmapText(
-      0, 140,'bitmapFont','',30
+      this.scene.systems.game.config.width/2,
+      140,
+      'bitmapFont',
+      '',
+      30
     );
+    this.start_text_sph.setOrigin(0.5,0.5);
     this.start_text_sph.depth = 100;
     this.start_text_sph.setInteractive();
     // this.start_text_sph.getTextBounds(true);
@@ -60,7 +68,8 @@ class TitleScene extends Phaser.Scene {
     this.start_text_sph.on('pointerdown', () => {
       this.registry.set('MODE', "SPH");
       this.startGame();
-    }); 
+    });
+    this.registry.set('stage', "1");
 
   }
   startGame() {

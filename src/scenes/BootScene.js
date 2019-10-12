@@ -19,7 +19,8 @@ class BootScene extends Phaser.Scene {
     });
 
     this.load.image('tiles', 'assets/tilemaps/tile.png');
-    this.load.tilemapTiledJSON('map', 'assets/tilemaps/tilemap.json');
+    this.load.tilemapTiledJSON('map1', 'assets/tilemaps/tilemap.json');
+    this.load.tilemapTiledJSON('map2', 'assets/tilemaps/tilemap2.json');
     
     this.load.spritesheet('player', 'assets/images/player.png', { frameWidth: 16, frameHeight: 22 });    
     this.load.spritesheet('enemy', 'assets/images/enemy.png', { frameWidth: 16, frameHeight: 16 });    
@@ -34,11 +35,12 @@ class BootScene extends Phaser.Scene {
     this.load.image('active_bar', 'assets/images/ui/active_bar.png');
     this.load.image('ui_coin_icon', 'assets/images/ui/coin.png');
     this.load.image('ui_level_icon', 'assets/images/ui/level.png');
+    this.load.image('cursor', 'assets/images/ui/cursor.png');
+    this.load.image('menu', 'assets/images/ui/menu.png');
 
-    this.load.image('sword', 'assets/images/sword.png');
-    this.load.spritesheet('sword_anime', 'assets/images/sword_anime.png', { frameWidth: 32, frameHeight: 32 });
     this.load.image('bullet', 'assets/images/bullet.png');
     this.load.image('scope', 'assets/images/scope.png');
+    this.load.image('axe', 'assets/images/axe.png');
 
     this.load.image('title_start', 'assets/images/title_start.png');
 
@@ -49,13 +51,14 @@ class BootScene extends Phaser.Scene {
     this.load.image('heart', 'assets/images/items/heart.png');
     this.load.image('coin', 'assets/images/items/coin.png');
     this.load.image('fire', 'assets/images/items/fire.png');
+    this.load.image('star', 'assets/images/items/star.png');
+    this.load.image('portion', 'assets/images/items/portion.png');
 
     this.load.image('fire_area', 'assets/images/items/fire_area.png');
 
     //spritesheetは画像のサイズを合わせないとframe errorになる...
     this.load.spritesheet('explosion_m', 'assets/images/explosion_m.png', { frameWidth: 16, frameHeight: 16 });
     this.load.spritesheet('explosion_s', 'assets/images/explosion_s.png', { frameWidth: 16, frameHeight: 16 });
-
 
   }
 
