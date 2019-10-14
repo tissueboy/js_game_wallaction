@@ -60,6 +60,7 @@ class BootScene extends Phaser.Scene {
     //spritesheetは画像のサイズを合わせないとframe errorになる...
     this.load.spritesheet('explosion_m', 'assets/images/explosion_m.png', { frameWidth: 16, frameHeight: 16 });
     this.load.spritesheet('explosion_s', 'assets/images/explosion_s.png', { frameWidth: 16, frameHeight: 16 });
+    this.load.spritesheet('player_star', 'assets/images/player_star.png', { frameWidth: 16, frameHeight: 22 });
 
   }
 

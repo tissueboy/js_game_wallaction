@@ -15,6 +15,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       config.hp
     );
 
+    // this.anims.play('playerIdleAnime', true);
+
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
 
@@ -82,8 +84,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.attacked = false;
 
-
-
+    this.starTimerEvent;
   }
 
   update(keys, time, delta) {
@@ -212,6 +213,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
   
   damage(num){
+
+    if(this.invincible){
+      return;
+    }
     
     if(this.isDamege === true){
       return;
@@ -260,5 +265,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     setTimeout(stop, 1000);
 
+  }
+  starMode(){
+    let _this = this;
+    this.anims.play('playerStarAnime', true);
+    this.invincible = true;
+    this.starTimerEvent = this.scene.time.delayedCall(
+      // delay: 0,
+      2000,
+      function(){
+        _this.invincible = false;
+        _this.anims.play('playerIdleAnime', true);
+      },
+      [],
+      this);
   }
 }

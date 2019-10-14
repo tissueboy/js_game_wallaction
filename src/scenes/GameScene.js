@@ -12,6 +12,7 @@ import Player from '../sprites/player/Player';
 import Boss1 from '../sprites/enemy/Boss1';
 import Boss2 from '../sprites/enemy/Boss2';
 
+import Star from '../sprites/item/Star';
 
 
 class GameScene extends Phaser.Scene {
@@ -60,6 +61,7 @@ class GameScene extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       key: 'player',
+      // frame: 'playerIdleAnime',
       x: 40,
       y: 100,
       hp: this.hp,
@@ -70,7 +72,9 @@ class GameScene extends Phaser.Scene {
     }
     this.player.weapon = this.registry.list.weapon;
 
-    this.hasItemList = [];
+    this.hasItemList = [
+      [Star, "star","item"]
+    ];
     if(this.registry.list.hasItemList){
       this.hasItemList = this.registry.list.hasItemList;
     }
@@ -223,6 +227,18 @@ class GameScene extends Phaser.Scene {
         frameRate: 10,
         repeat: -1
       });      
+      this.anims.create({
+        key: 'playerIdleAnime',
+        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1 }),
+        frameRate: 10,
+        repeat: -1
+      }); 
+      this.anims.create({
+        key: 'playerStarAnime',
+        frames: this.anims.generateFrameNumbers('player_star', { start: 0, end: 1 }),
+        frameRate: 10,
+        repeat: -1
+      });  
     }
 
 
@@ -305,8 +321,6 @@ class GameScene extends Phaser.Scene {
         return true;
       }
     });
-
-    console.log("bossObj",bossObj[0].boss.class);
 
     let boss = new bossObj[0].boss.class({
       scene: this,

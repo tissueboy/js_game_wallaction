@@ -37,9 +37,9 @@ export default class Menu extends Phaser.Physics.Arcade.Sprite{
     this.btnUseText.setOrigin(0.5,0.5);
     let _this = this;
     this.btnUseText.on('pointerdown', () => {
+      console.log("btnUseText");
       let selectedItem = this.selectItem.item[0];
       let selectedItemIndex = this.selectItemIndex;
-      console.log("selectedItemIndex",selectedItemIndex);
       let item_key = selectedItem[1];
       let item = new selectedItem({
         scene: this
@@ -47,7 +47,7 @@ export default class Menu extends Phaser.Physics.Arcade.Sprite{
       this.scene.hasItemList.splice(selectedItemIndex, 1 );
       this.displayItemList();
       this.cursor.visible = false;  
-
+      this.btnUseText.visible = false;
     });
 
     this.on('pointerdown', () => {
@@ -60,6 +60,7 @@ export default class Menu extends Phaser.Physics.Arcade.Sprite{
         this.container.visible = false;
         this.togglePlay = true;
       }
+      
     });
     this.displayItemList();
 
@@ -77,7 +78,6 @@ export default class Menu extends Phaser.Physics.Arcade.Sprite{
       sprite.depth = 101;
       sprite.setInteractive();
       this.container.add(sprite);
-      console.log("i",i);
       // let index = i;
       sprite.index = i;
       sprite.item = item;

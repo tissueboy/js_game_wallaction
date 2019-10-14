@@ -67,7 +67,6 @@ export default class Boss1 extends Enemy {
     }
   }
   attack(){
-    console.log("attack()");
     this.attackTimerEvent = this.scene.time.addEvent({
       delay: 6000,
       callback: this.attackAnimation,
@@ -77,12 +76,10 @@ export default class Boss1 extends Enemy {
     });    
   }
   attackAnimation(){
-    console.log("attackAnimation");
     this.runMode = "attack";
     let _target = this;
     this.body.setVelocity(0,0);
     let _target_y = _target.y;
-    console.log("_target_y",_target_y);
     
     this.bossAttackBefore = this.scene.tweens.timeline({
       targets: _target,
@@ -104,7 +101,6 @@ export default class Boss1 extends Enemy {
     });    
   }
   attackMove(){
-    console.log("attackMove");
     let _target = this;
     let _target_y = this.base_y;
     this.bossAttackMove = this.scene.tweens.timeline({
@@ -132,8 +128,6 @@ export default class Boss1 extends Enemy {
     });     
   }
   checkDistance(_mode){
-
-    console.log("_mode",_mode);
 
     if(_mode === "attack"){
       this.body.setVelocity(0,0);
