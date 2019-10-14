@@ -10,6 +10,7 @@ import Menu from '../helper/Menu';
 
 import Player from '../sprites/player/Player';
 import Boss1 from '../sprites/enemy/Boss1';
+import Boss2 from '../sprites/enemy/Boss2';
 
 
 
@@ -36,6 +37,23 @@ class GameScene extends Phaser.Scene {
     this.objectLayer.setCollisionBetween(0, 2);
     this.objectLayer.setCollisionByProperty({ collides: true });
     this.objectLayer.depth = 2;
+
+    this.stageList = [
+      {
+        stage: 1,
+        boss: {
+          class: Boss1,
+          key: "boss1"
+        }
+      },
+      {
+        stage: 2,
+        boss: {
+          class: Boss2,
+          key: "boss2"
+        }
+      }
+    ];
 
 
 
@@ -220,8 +238,8 @@ class GameScene extends Phaser.Scene {
     this.spellGroup = this.add.group();
     this.spellGroup.depth = 5;
 
-    this.bossGroup = this.add.group();
-    this.bossGroup.depth = 14;
+    // this.bossGroup = this.add.group();
+    // this.bossGroup.depth = 14;
 
     // this.parseObjectLayers();
 
@@ -269,11 +287,11 @@ class GameScene extends Phaser.Scene {
       }
     );
 
-    this.bossGroup.children.entries.forEach(
-      (sprite) => {
-        sprite.update(time, delta);
-      }
-    );
+    // this.bossGroup.children.entries.forEach(
+    //   (sprite) => {
+    //     sprite.update(time, delta);
+    //   }
+    // );
     
     this.keypad.update(this.input);
 
@@ -281,10 +299,18 @@ class GameScene extends Phaser.Scene {
 
   }
   createBoss(){
+    let _stageNumber = this.stageNumber;
+    let bossObj = this.stageList.filter(function(item, index){
+      if (item.stage == _stageNumber){
+        return true;
+      }
+    });
 
-    let boss = new Boss1({
+    console.log("bossObj",bossObj[0].boss.class);
+
+    let boss = new bossObj[0].boss.class({
       scene: this,
-      key: 'boss1',
+      key: bossObj[0].boss.key,
       x: 100,
       y: 80,
       type: "boss"
@@ -293,7 +319,7 @@ class GameScene extends Phaser.Scene {
     boss.depth = 10;
     boss.appearEnemy(boss);
 
-    this.bossGroup.add(boss);
+    this.enemyGroup.add(boss);
 
 
     this.createObjects.createObjTimerEvent.remove(false);

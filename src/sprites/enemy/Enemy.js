@@ -30,6 +30,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     this.hp;
 
+    this.invincible = false;
+
     this.explodeSprite;
 
     this.damage_text = 0;
@@ -116,6 +118,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.countTouch++; 
   }
   damage(num){
+
+    if(this.invincible){
+      return;
+    }
 
     this.scene.combo.hit();  
 

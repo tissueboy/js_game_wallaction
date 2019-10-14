@@ -1,6 +1,6 @@
 import Enemy from './Enemy';
 
-export default class Boss1 extends Enemy {
+export default class Boss2 extends Enemy {
 
   constructor(config) {
 
