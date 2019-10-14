@@ -2,7 +2,6 @@ import Star from '../sprites/item/Star';
 import Portion from '../sprites/item/Portion';
 export default class Menu extends Phaser.Physics.Arcade.Sprite{
   constructor(config) {
-
     super(
       config.scene,
       config.x,
@@ -37,9 +36,9 @@ export default class Menu extends Phaser.Physics.Arcade.Sprite{
     this.btnUseText.setOrigin(0.5,0.5);
     let _this = this;
     this.btnUseText.on('pointerdown', () => {
-      console.log("btnUseText");
       let selectedItem = this.selectItem.item[0];
       let selectedItemIndex = this.selectItemIndex;
+      this.container.removeAt(selectedItemIndex);
       let item_key = selectedItem[1];
       let item = new selectedItem({
         scene: this
@@ -48,6 +47,7 @@ export default class Menu extends Phaser.Physics.Arcade.Sprite{
       this.displayItemList();
       this.cursor.visible = false;  
       this.btnUseText.visible = false;
+      this.container.visible = false;
     });
 
     this.on('pointerdown', () => {

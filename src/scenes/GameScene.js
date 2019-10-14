@@ -73,7 +73,7 @@ class GameScene extends Phaser.Scene {
     this.player.weapon = this.registry.list.weapon;
 
     this.hasItemList = [
-      [Star, "star","item"]
+      // [Star, "star","item"]//デバッグ用
     ];
     if(this.registry.list.hasItemList){
       this.hasItemList = this.registry.list.hasItemList;

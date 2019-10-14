@@ -15,6 +15,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       config.hp
     );
 
+    console.log("this",this);
+
     // this.anims.play('playerIdleAnime', true);
 
     config.scene.physics.world.enable(this);
