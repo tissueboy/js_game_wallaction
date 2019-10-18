@@ -52,8 +52,6 @@ export default class ClearStage extends Phaser.Physics.Arcade.Sprite{
     config.scene.physics.world.enable(this.btnNextText);
     config.scene.add.existing(this.btnNextText);
 
-    console.log("this.btnNextText",this.btnNextText);
-
     this.dropItemList = [
       [Axe, "axe","weapon"],
       [Portion, "portion","item"],

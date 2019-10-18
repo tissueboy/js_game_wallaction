@@ -1,6 +1,7 @@
-import Enemy from './Enemy';
+import EnemyChase from './EnemyChase';
+import Bullet from '../weapon/Bullet';
 
-export default class Brain extends Enemy {
+export default class Brain extends EnemyChase {
 
   constructor(config) {
 
@@ -14,14 +15,6 @@ export default class Brain extends Enemy {
       attackPoint: 2
     }
 
-    this.chasingPlayerTimerEvent;
-    this.shootingPlayerTimerEvent;
-
-    this.MONSTER_SPEED = 1;
-    this.MONSTER_HIT_DELAY = 100;
-    this.CHASING_DISTANCE = 60;
-    this.isStartled = false;
-
   }
 
   update(keys, time, delta) {
@@ -32,114 +25,29 @@ export default class Brain extends Enemy {
     this.hp.move(this.x,this.y);
 
   }
-  handleChase() {
-    if (!this.chasingPlayerTimerEvent && this.shouldChase()) {
-      this.startChasing();
-      this.startShooting();
-      return;
-    }
-
-    if (this.chasingPlayerTimerEvent && !this.shouldChase()) {
-      this.stopChasing();
-      this.stopShooting();
-    }
-
-    // if (!this.shouldChase()) {
-    //   // this.wanderAround();
-    // }
-  }
-  shouldChase() {
-    const playerPoint = this.scene.player.getCenter();
-    const monsterPoint = this.getCenter();
-    const distance = monsterPoint.distance(playerPoint);
-
-    if (distance < this.CHASING_DISTANCE) {
-      return true;
-    }
-
-    if (this.isStartled) {
-      return true;
-    }
-
-    return false;
-  }
-  startChasing() {
-    this.chasingPlayerTimerEvent = this.scene.time.addEvent({
-      delay: 1000,
-      callback: this.moveTowardsPlayer,
-      callbackScope: this,
-      repeat: Infinity
-    });
-  }
-  stopChasing() {
-    if (this.active) {
-      this.stopRunning();
-    }
-    // this.chasingPlayerTimerEvent.destroy();
-    this.chasingPlayerTimerEvent = null;
-  }
-  moveTowardsPlayer() {
+  attack(){
     if (!this.active) {
       return;
     }
-
-    const playerPoint = this.scene.player.getCenter();
-    const monsterPoint = this.getCenter();
-    var { x,y } = playerPoint.subtract(monsterPoint);
-
+    var radian = Math.atan2(this.direction.x, this.direction.y);
     var rangeRadius = 10;
-    var radian = Math.atan2(x, y);
-    x = rangeRadius * Math.sin(radian);
-    y = rangeRadius * Math.cos(radian);
+    var direction_x = rangeRadius * Math.sin(radian);
+    var direction_y = rangeRadius * Math.cos(radian);
 
-    this.direction.x = x;
-    this.direction.y = y;
-
-    this.run(x, y);
-
-  }
-  run(x, y) {
-
-    if (x === 0 && y === 0) {
-      return;
-    }
-
-    if (!this.active) {
-      return;
-    }
-
-    this.setVelocityX(x * this.MONSTER_SPEED);
-    this.setVelocityY(y * this.MONSTER_SPEED);
-
-  }
-  stopRunning() {
-    if (!this.active) {
-      return;
-    }
-
-    this.setVelocity(0);
-    // this.beIdle();
-  }
-  startShooting() {
-    this.shootingPlayerTimerEvent = this.scene.time.addEvent({
-      delay: 1000,
-      callback: this.bullet,
-      callbackScope: this,
-      repeat: Infinity
+    var bullet = new Bullet({
+      scene: this.scene,
+      key: 'bullet',
+      x: this.x,
+      y: this.y,
+      vx: direction_x,
+      vy: direction_y,
+      target: this,
+      power: 0,
+      scale: 1,
+      type: "enemy"
     });
-  }
-  stopShooting() {
-    if (!this.active) {
-      return;
-    }
-    if (this.active) {
-      this.stopRunning();
-    }
-    // this.shootingPlayerTimerEvent.destroy();
-    this.shootingPlayerTimerEvent.remove(false);
-    this.shootingPlayerTimerEvent = null;
-    this.direction.x = 0;
-    this.direction.y = 0;
+    this.scene.bulletEnemyGroup.add(bullet);   
+    this.countTouch++; 
   }
 
 }

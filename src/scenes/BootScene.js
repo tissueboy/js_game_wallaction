@@ -26,6 +26,7 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('enemy', 'assets/images/enemy.png', { frameWidth: 16, frameHeight: 16 });    
     this.load.spritesheet('bad', 'assets/images/bad.png', { frameWidth: 10, frameHeight: 10 });    
     this.load.image('brain', 'assets/images/brain.png');
+    this.load.image('wizerd', 'assets/images/wizerd.png');
     this.load.image('boss1', 'assets/images/boss1.png');
     this.load.image('boss2', 'assets/images/boss2.png');
 
@@ -40,6 +41,7 @@ class BootScene extends Phaser.Scene {
     this.load.image('menu', 'assets/images/ui/menu.png');
 
     this.load.image('bullet', 'assets/images/bullet.png');
+    this.load.image('sword', 'assets/images/sword.png');
     this.load.image('scope', 'assets/images/scope.png');
     this.load.image('axe', 'assets/images/axe.png');
 

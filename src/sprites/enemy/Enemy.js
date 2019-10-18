@@ -1,5 +1,4 @@
 import EnemyHp from './EnemyHp';
-import Bullet from '../weapon/Bullet';
 import Explode from '../Explode';
 
 import Item from '../item/Item';
@@ -91,31 +90,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       this.explodeAnime.update(time, delta);
     }
 
-  }
-
-  bullet(){
-    if (!this.active) {
-      return;
-    }
-    var radian = Math.atan2(this.direction.x, this.direction.y);
-    var rangeRadius = 10;
-    var direction_x = rangeRadius * Math.sin(radian);
-    var direction_y = rangeRadius * Math.cos(radian);
-
-    var bullet = new Bullet({
-      scene: this.scene,
-      key: 'bullet',
-      x: this.x,
-      y: this.y,
-      vx: direction_x,
-      vy: direction_y,
-      target: this,
-      power: 0,
-      scale: 1,
-      type: "enemy"
-    });
-    this.scene.bulletEnemyGroup.add(bullet);   
-    this.countTouch++; 
   }
   damage(num){
 

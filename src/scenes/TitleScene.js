@@ -73,7 +73,7 @@ class TitleScene extends Phaser.Scene {
 
   }
   startGame() {
-    this.scene.stop('GameScene');
+    // this.scene.stop('GameScene');
     this.scene.start('GameScene');
   }
 }
