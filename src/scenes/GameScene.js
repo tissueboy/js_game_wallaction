@@ -239,6 +239,12 @@ class GameScene extends Phaser.Scene {
         frameRate: 10,
         repeat: -1
       });  
+      this.anims.create({
+        key: 'swordAnime',
+        frames: this.anims.generateFrameNumbers('sword_anime', { start: 0, end: 6 }),
+        frameRate: 10,
+        repeat: 0
+      });  
     }
 
 

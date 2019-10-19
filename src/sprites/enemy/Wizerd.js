@@ -13,39 +13,30 @@ export default class Wizerd extends EnemyChase {
       experience: 10,
       attackPoint: 2
     }
+    this.ATTACKING_DISTANCE = 20;
     this.sword = this.scene.add.sprite(this.x, this.y, 'sword');
     this.sword.depth = 11;
     config.scene.physics.world.enable(this.sword);
     config.scene.add.existing(this.sword);
     config.scene.physics.add.overlap(this.scene.player,this.sword,
       function(){
-        console.log("hit sword");
+        // console.log("hit sword");
     });
-    this.sword.setOrigin(0.5,1.2);
+    this.sword.setOrigin(0.5,0.5);
     this.sword.setVisible(false);
-    // let _sword = this.sword;
-    // this.axeTween = this.scene.tweens.add({
-    //   targets: this.sword,
-    //   angle: 360,
-    //   repeat: 0,
-    //   duration: 800,
-    //   onComplete: function () {
-    //     _sword.setVisible(false);
-    //   },
-    // });
-    // this.rect = new Phaser.Geom.Rectangle(0, 0, 20, 20);
-    // this.hitBox = this.scene.add.zone({ fillStyle: { color: 0x0000ff } });
-    // this.hitBox.fillRectShape(this.rect);
-    // this.hitBox.depth = 120;
-    // this.hitBox.x = this.x;
-    // this.hitBox.y = this.y;
-    // this.hitBox.alpha = 0.4;
-    // console.log("this.hitBox",this.hitBox);
-    // this.hitBox.displayOriginX = 0.5;
-    // this.hitBox.displayOriginY = 0.5;
+    this.sword.on(
+      'animationcomplete',
+      function(){
+        console.log("animationcomplete");
+        this.isAttacking = false;
+        this.sword.setVisible(false);
+        // this.sword.anims.stop();
+      },
+      this
+    );
+
 
     this.zone = this.scene.add.zone(20, 20).setSize(20, 20);
-    // this.zone = this.scene.add.zone(10, 10).setSize(200, 200);
     this.zone.x = this.x;
     this.zone.y = this.y;
     config.scene.physics.world.enable(this.zone);
@@ -57,7 +48,7 @@ export default class Wizerd extends EnemyChase {
 
     config.scene.physics.add.overlap(this.scene.player,this.zone,
       function(){
-        console.log("hit hitBox");
+
     });
     this.zone.setOrigin(0.5,1.2);
 
@@ -82,11 +73,12 @@ export default class Wizerd extends EnemyChase {
     */
   }
   attack(){
+    console.log("attack");
     if (!this.active) {
       return;
     }
     var radian = Math.atan2(this.direction.x, this.direction.y);
-    var degree = radian * ( 180 / Math.PI ) ;
+    var degree = radian * 360/(2*Math.PI);
     // var rangeRadius = 10;
     // var direction_x = rangeRadius * Math.sin(radian);
     // var direction_y = rangeRadius * Math.cos(radian);
@@ -98,9 +90,6 @@ export default class Wizerd extends EnemyChase {
       return;
     }
     this.isAttacking = true;
-    console.log("degree",degree);
-    console.log("this.direction.x",this.direction.x);
-    console.log("this.direction.y",this.direction.y);
     this.attackHitEvent = this.scene.time.addEvent({
       delay: 300,
       callback: function(){
@@ -110,25 +99,39 @@ export default class Wizerd extends EnemyChase {
       callbackScope: this,
       repeat: 0,
       // startAt: 1000,
-    });    
-    this.attackMoveTween = this.scene.tweens.timeline({
-      targets: _target,
-      tweens: [{
-        angle: degree - 90
-      },
-      {
-        angle: degree + 90
-      }
-      ],
-      ease: 'liner',
-      duration: 600,
-      repeat: 0,
-      completeDelay: 400,
-      onComplete: function () {
-        _target.setVisible(false);
-        _this.isAttacking = false;
-        _this.attackMoveTween.stop;
-      }
-    }); 
+    });
+    this.sword.anims.play('swordAnime', true);
+
+    // let degree_start = 0;
+    // let degree_base = 0;
+    // if(degree > 0){
+    //   degree_base = 180 - degree;
+    // }else{
+    //   degree_base = (-180 - degree) * -1;
+    // }
+
+    // this.attackMoveTween = this.scene.tweens.timeline({
+    //   targets: _target,
+    //   tweens: [{
+    //     angle: degree_base - 90
+    //   },
+    //   {
+    //     angle: degree_base + 90
+    //   }
+    //   ],
+    //   ease: 'liner',
+    //   duration: 600,
+    //   repeat: 0,
+    //   completeDelay: 400,
+    //   onComplete: function () {
+    //     _target.setVisible(false);
+    //     _this.isAttacking = false;
+    //     _this.attackMoveTween.stop;
+    //   }
+    // }); 
+  }
+  attackStop(){
+    console.log("attackStop");
+    this.sword.anims.resume();
   }
 }

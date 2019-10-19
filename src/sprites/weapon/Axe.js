@@ -5,9 +5,6 @@ export default class Axe extends Bullet {
   constructor(config) {
 
     super(config);
-
-    console.log("this.axe",this);
-
     
     var axeTween = this.scene.tweens.add({
       targets: this,

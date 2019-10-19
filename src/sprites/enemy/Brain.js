@@ -49,5 +49,8 @@ export default class Brain extends EnemyChase {
     this.scene.bulletEnemyGroup.add(bullet);   
     this.countTouch++; 
   }
+  attackStop(){
+    
+  }
 
 }

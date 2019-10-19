@@ -20,6 +20,7 @@ export default class EnemyChase extends Enemy {
     this.MONSTER_SPEED = 1;
     this.MONSTER_HIT_DELAY = 100;
     this.CHASING_DISTANCE = 60;
+    this.ATTACKING_DISTANCE = 60;
     this.isStartled = false;
 
   }
@@ -34,15 +35,24 @@ export default class EnemyChase extends Enemy {
   }
 
   handleChase() {
-    if (!this.chasingPlayerTimerEvent && this.shouldChase()) {
+    if (!this.chasingPlayerTimerEvent && this.shouldChase() ) {
       this.startChasing();
-      this.startAttacking();
       return;
+    }
+    if (!this.attackingPlayerTimerEvent && this.shouldAttack()) {
+      console.log("startAttacking")
+      this.startAttacking();
+    }
+    if (this.chasingPlayerTimerEvent && this.shouldAttack()) {
+      this.stopRunning();
+    }
+    if (this.attackingPlayerTimerEvent && !this.shouldAttack()) {
+      this.stopAttacking();
     }
 
     if (this.chasingPlayerTimerEvent && !this.shouldChase()) {
       this.stopChasing();
-      this.stopAttacking();
+      
     }
 
   }
@@ -73,8 +83,10 @@ export default class EnemyChase extends Enemy {
     if (this.active) {
       this.stopRunning();
     }
+    this.chasingPlayerTimerEvent.remove(false);
     this.chasingPlayerTimerEvent = null;
   }
+
   moveTowardsPlayer() {
     if (!this.active) {
       return;
@@ -116,6 +128,17 @@ export default class EnemyChase extends Enemy {
 
     this.setVelocity(0);
   }
+  shouldAttack() {
+    const playerPoint = this.scene.player.getCenter();
+    const monsterPoint = this.getCenter();
+    const distance = monsterPoint.distance(playerPoint);
+
+    if (distance < this.ATTACKING_DISTANCE) {
+      return true;
+    }
+
+    return false;
+  }
   startAttacking() {
     this.attackingPlayerTimerEvent = this.scene.time.addEvent({
       delay: 1000,
@@ -128,11 +151,13 @@ export default class EnemyChase extends Enemy {
     if (!this.active) {
       return;
     }
-    if (this.active) {
-      this.stopRunning();
+    this.attackStop();
+    if(this.attackingPlayerTimerEvent){
+      this.attackingPlayerTimerEvent.remove(false);
+      this.attackingPlayerTimerEvent = null;
     }
-    this.attackingPlayerTimerEvent.remove(false);
-    this.attackingPlayerTimerEvent = null;
+
+    // this.attackingPlayerTimerEvent.destroy();
     this.direction.x = 0;
     this.direction.y = 0;
   }
