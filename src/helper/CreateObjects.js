@@ -2,6 +2,7 @@ import Enemy from '../sprites/enemy/Enemy';
 import Bad from '../sprites/enemy/Bad';
 import Brain from '../sprites/enemy/Brain';
 import Wizerd from '../sprites/enemy/Wizerd';
+import Wizerd2 from '../sprites/enemy/Wizerd2';
 
 import Item from '../sprites/item/Item';
 import Heart from '../sprites/item/Heart';
@@ -34,13 +35,14 @@ export default class CreateObjects  extends Phaser.Time.TimerEvent{
     this.appear_max_length = 3;
 
     this.objListEnemy = [
-      // [Brain,"brain"],
-      // [Bad,"bad"],
-      [Wizerd,"wizerd"]
+      [Brain,"brain"],
+      [Bad,"bad"],
+      [Wizerd,"wizerd"],
+      [Wizerd2,"wizerd2"]
     ];
     this.objListItem = [
-      // [Heart,"heart"],
-      // [Coin,"coin"],
+      [Heart,"heart"],
+      [Coin,"coin"],
       [Fire,"fire"]
     ];
   }

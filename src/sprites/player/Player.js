@@ -64,7 +64,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     this.status = {
       hp: 10,
-      power: 20,
+      power: 6,
       defense: 1
     }
     this.damage_text = 0;

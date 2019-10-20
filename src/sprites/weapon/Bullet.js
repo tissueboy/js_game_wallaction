@@ -16,7 +16,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
       config.scale,
       config.type
     );
-
+    this.power = 1;
     this.attribute = "weapon";
 
     this.type = config.type;
@@ -43,7 +43,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
 
     this.target = config.target;
     
-    this.attackPoint = Math.floor(1 * this.target.status.power + (this.target.status.power * config.power));
+    this.attackPoint = Math.floor(1 * this.target.status.power + this.power);
 
     this.speed = 100;
     this.depth = 10;

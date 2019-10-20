@@ -27,6 +27,7 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('bad', 'assets/images/bad.png', { frameWidth: 10, frameHeight: 10 });    
     this.load.image('brain', 'assets/images/brain.png');
     this.load.image('wizerd', 'assets/images/wizerd.png');
+    this.load.image('wizerd2', 'assets/images/wizerd2.png');
     this.load.image('boss1', 'assets/images/boss1.png');
     this.load.image('boss2', 'assets/images/boss2.png');
 
@@ -41,6 +42,7 @@ class BootScene extends Phaser.Scene {
     this.load.image('menu', 'assets/images/ui/menu.png');
 
     this.load.image('bullet', 'assets/images/bullet.png');
+    this.load.image('barrier', 'assets/images/barrier.png');
     this.load.image('sword', 'assets/images/sword.png');
     this.load.image('scope', 'assets/images/scope.png');
     this.load.image('axe', 'assets/images/axe.png');
@@ -64,6 +66,7 @@ class BootScene extends Phaser.Scene {
     this.load.spritesheet('explosion_s', 'assets/images/explosion_s.png', { frameWidth: 16, frameHeight: 16 });
     this.load.spritesheet('player_star', 'assets/images/player_star.png', { frameWidth: 16, frameHeight: 22 });
     this.load.spritesheet('sword_anime', 'assets/images/sword_anime.png', { frameWidth: 40, frameHeight: 40 });
+    this.load.spritesheet('sword_anime_l', 'assets/images/sword_anime_l.png', { frameWidth: 80, frameHeight: 80 });
 
   }
 

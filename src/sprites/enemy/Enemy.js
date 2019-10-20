@@ -171,7 +171,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     if(type === "boss"){
       this.scene.clearStageDisplay();
-    }    
+    }  
+    this.active = false;  
     this.explodeSprite.destroy();
     this.getExperience();
     this.dropItem();

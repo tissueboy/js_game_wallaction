@@ -13,7 +13,7 @@ export default class Wizerd extends EnemyChase {
       experience: 10,
       attackPoint: 2
     }
-    this.ATTACKING_DISTANCE = 20;
+    this.ATTACKING_DISTANCE = 30;
     this.sword = this.scene.add.sprite(this.x, this.y, 'sword');
     this.sword.depth = 11;
     config.scene.physics.world.enable(this.sword);
@@ -27,16 +27,14 @@ export default class Wizerd extends EnemyChase {
     this.sword.on(
       'animationcomplete',
       function(){
-        console.log("animationcomplete");
         this.isAttacking = false;
         this.sword.setVisible(false);
-        // this.sword.anims.stop();
       },
       this
     );
 
 
-    this.zone = this.scene.add.zone(20, 20).setSize(20, 20);
+    this.zone = this.scene.add.zone(this.x, this.y).setSize(this.width, this.height);
     this.zone.x = this.x;
     this.zone.y = this.y;
     config.scene.physics.world.enable(this.zone);
@@ -46,11 +44,18 @@ export default class Wizerd extends EnemyChase {
     this.zone.body.debugBodyColor = 0x00ffff;
     this.zone.setOrigin(0.5, 0.5);
 
-    config.scene.physics.add.overlap(this.scene.player,this.zone,
-      function(){
+    let _this = this;
 
-    });
-    this.zone.setOrigin(0.5,1.2);
+    config.scene.physics.add.overlap(this.scene.player,this.zone,
+      function(player,zone){
+        if(!_this.active){
+          return;
+        }
+        player.damage(_this.status.attackPoint);
+        console.log("hit zone",);
+      }
+    );
+    this.zone.setOrigin(0.5,0.5);
 
     this.attackingMoveTimerEvent;
     this.attackMoveTween = this.scene.tweens.createTimeline();
@@ -64,13 +69,12 @@ export default class Wizerd extends EnemyChase {
     }
     this.handleChase();
     this.hp.move(this.x,this.y);
+    if(!this.isAttacking){
+      this.zone.x = this.x - this.width/2;
+      this.zone.y = this.y - this.height/2;  
+    }
     this.sword.x = this.x;
     this.sword.y = this.y;
-    /*
-    TODO
-    swordを回転させる。
-    回転に合わせてhitbox用のgeomを作成して当たり判定する。
-    */
   }
   attack(){
     console.log("attack");
@@ -78,14 +82,14 @@ export default class Wizerd extends EnemyChase {
       return;
     }
     var radian = Math.atan2(this.direction.x, this.direction.y);
-    var degree = radian * 360/(2*Math.PI);
-    // var rangeRadius = 10;
-    // var direction_x = rangeRadius * Math.sin(radian);
-    // var direction_y = rangeRadius * Math.cos(radian);
+
 
     let _target = this.sword;
     let _this = this;
     this.sword.setVisible(true);
+    var degree = radian *  180 / Math.PI *-1;
+    console.log("degree",degree);
+    this.sword.angle = degree;
     if(this.isAttacking){
       return;
     }
@@ -93,42 +97,13 @@ export default class Wizerd extends EnemyChase {
     this.attackHitEvent = this.scene.time.addEvent({
       delay: 300,
       callback: function(){
-        this.zone.x = this.x + this.direction.x;
-        this.zone.y = this.y + this.direction.y;
+        this.zone.x = this.zone.x + this.zone.width*Math.sin(radian);
+        this.zone.y = this.zone.y + this.zone.height*Math.cos(radian);
       },
       callbackScope: this,
       repeat: 0,
-      // startAt: 1000,
     });
-    this.sword.anims.play('swordAnime', true);
-
-    // let degree_start = 0;
-    // let degree_base = 0;
-    // if(degree > 0){
-    //   degree_base = 180 - degree;
-    // }else{
-    //   degree_base = (-180 - degree) * -1;
-    // }
-
-    // this.attackMoveTween = this.scene.tweens.timeline({
-    //   targets: _target,
-    //   tweens: [{
-    //     angle: degree_base - 90
-    //   },
-    //   {
-    //     angle: degree_base + 90
-    //   }
-    //   ],
-    //   ease: 'liner',
-    //   duration: 600,
-    //   repeat: 0,
-    //   completeDelay: 400,
-    //   onComplete: function () {
-    //     _target.setVisible(false);
-    //     _this.isAttacking = false;
-    //     _this.attackMoveTween.stop;
-    //   }
-    // }); 
+    this.sword.anims.play('swordAnimeL', true);
   }
   attackStop(){
     console.log("attackStop");
