@@ -28,6 +28,7 @@ class BootScene extends Phaser.Scene {
     this.load.image('brain', 'assets/images/brain.png');
     this.load.image('wizerd', 'assets/images/wizerd.png');
     this.load.image('wizerd2', 'assets/images/wizerd2.png');
+    this.load.image('wizerd3', 'assets/images/wizerd3.png');
     this.load.image('boss1', 'assets/images/boss1.png');
     this.load.image('boss2', 'assets/images/boss2.png');
 
